@@ -72,7 +72,6 @@
       padding: 12px 16px 16px;
     }
 
-    /* GOLVEN & DETAILS */
     .wave-top {
       position: absolute;
       inset: 0 0 auto 0;
@@ -209,8 +208,150 @@
       font-size: 1.1rem;
     }
 
+    /* PROFIEL / ACCOUNT */
+    .profile {
+      margin-top: 6px;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(15, 23, 42, 0.6);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    [data-theme="light"] .profile {
+      background: rgba(239, 246, 255, 0.9);
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    @media (max-width: 720px) {
+      .profile {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .profile-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #bfdbfe, #1d4ed8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.8);
+    }
+
+    .profile-text-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .profile-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-soft);
+    }
+
+    .profile-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .profile-edit {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .profile-row input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      padding: 6px 9px;
+      font-size: 0.82rem;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+    }
+
+    [data-theme="light"] .profile-row input {
+      background: #eff6ff;
+      color: #0f172a;
+    }
+
+    .profile-row button {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #1f2933;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.7);
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.74rem;
+      color: var(--muted-soft);
+    }
+
+    .avatar-row span {
+      margin-right: 2px;
+    }
+
+    .avatar-option {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.6);
+      padding: 3px 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: var(--muted-soft);
+    }
+
+    [data-theme="light"] .avatar-option {
+      background: #e0f2fe;
+    }
+
+    .avatar-option span.icon {
+      font-size: 1rem;
+    }
+
+    .avatar-option.active {
+      border-color: var(--accent-strong);
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--accent-strong);
+    }
+
+    /* GRID & CARDS */
     .grid {
-      margin-top: 10px;
+      margin-top: 6px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
@@ -326,6 +467,7 @@
       margin-top: 4px;
       font-size: 0.78rem;
       color: var(--muted);
+      flex-wrap: wrap;
     }
 
     .primary-btn {
@@ -362,6 +504,15 @@
     .primary-btn:active {
       transform: translateY(1px) scale(0.98);
       filter: brightness(0.98);
+    }
+
+    .highscore-label {
+      font-size: 0.76rem;
+      color: var(--muted-soft);
+    }
+
+    .highscore-label strong {
+      color: var(--accent);
     }
 
     footer {
@@ -513,6 +664,62 @@
         </div>
       </header>
 
+      <!-- ACCOUNT / PROFIEL -->
+      <section class="profile">
+        <div class="profile-main">
+          <div id="profileAvatar" class="profile-avatar">🚢</div>
+          <div class="profile-text-main">
+            <div class="profile-label">Jouw account</div>
+            <div id="profileNameDisplay" class="profile-name">Gast kapitein</div>
+          </div>
+        </div>
+        <div class="profile-edit">
+          <div class="profile-row">
+            <input
+              id="profileNameInput"
+              type="text"
+              placeholder="Typ hier je naam (bijv. Kapitein Alex)"
+            />
+            <button id="profileSaveBtn" type="button">Opslaan</button>
+          </div>
+          <div class="avatar-row">
+            <span>Avatar:</span>
+            <button
+              type="button"
+              class="avatar-option active"
+              data-emoji="🚢"
+            >
+              <span class="icon">🚢</span>
+              <span>Schip</span>
+            </button>
+            <button
+              type="button"
+              class="avatar-option"
+              data-emoji="⚓"
+            >
+              <span class="icon">⚓</span>
+              <span>Kapitein</span>
+            </button>
+            <button
+              type="button"
+              class="avatar-option"
+              data-emoji="⛴️"
+            >
+              <span class="icon">⛴️</span>
+              <span>Veerboot</span>
+            </button>
+            <button
+              type="button"
+              class="avatar-option"
+              data-emoji="🛟"
+            >
+              <span class="icon">🛟</span>
+              <span>Redder</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section id="gameGrid" class="grid">
         <!-- GAME 1: CLICK GAME -->
         <article
@@ -550,7 +757,9 @@
               <a href="click-game.html" class="primary-btn">
                 ▶ Start Cargo Click
               </a>
-              <span>Kort & simpel</span>
+              <span class="highscore-label">
+                Beste score: <strong id="clickHighscoreLabel">nog geen score</strong>
+              </span>
             </div>
           </div>
         </article>
@@ -591,7 +800,9 @@
               <a href="harbor-patrol.html" class="primary-btn">
                 ▶ Start Harbor Patrol
               </a>
-              <span>Meer spanning</span>
+              <span class="highscore-label">
+                Beste score: <strong id="harborHighscoreLabel">nog geen score</strong>
+              </span>
             </div>
           </div>
         </article>
@@ -668,6 +879,86 @@
         const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
         applyTheme(current === "light" ? "dark" : "light");
       });
+    })();
+
+    // PROFIEL / ACCOUNT
+    (function initProfile() {
+      const nameDisplay = document.getElementById("profileNameDisplay");
+      const nameInput = document.getElementById("profileNameInput");
+      const saveBtn = document.getElementById("profileSaveBtn");
+      const avatarEl = document.getElementById("profileAvatar");
+      const avatarButtons = document.querySelectorAll(".avatar-option");
+
+      function loadProfile() {
+        const savedName = localStorage.getItem("shipGamesProfileName");
+        const savedAvatar = localStorage.getItem("shipGamesProfileAvatar");
+
+        if (savedName && savedName.trim() !== "") {
+          nameDisplay.textContent = savedName;
+          nameInput.value = savedName;
+        } else {
+          nameDisplay.textContent = "Gast kapitein";
+        }
+
+        let avatarEmoji = "🚢";
+        if (savedAvatar) {
+          avatarEmoji = savedAvatar;
+        }
+        avatarEl.textContent = avatarEmoji;
+
+        avatarButtons.forEach((btn) => {
+          const emoji = btn.getAttribute("data-emoji");
+          btn.classList.toggle("active", emoji === avatarEmoji);
+        });
+      }
+
+      function saveProfile() {
+        const rawName = nameInput.value.trim();
+        const name = rawName || "Kapitein";
+        nameDisplay.textContent = name;
+        localStorage.setItem("shipGamesProfileName", name);
+      }
+
+      saveBtn.addEventListener("click", saveProfile);
+
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          saveProfile();
+        }
+      });
+
+      avatarButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const emoji = btn.getAttribute("data-emoji");
+          avatarEl.textContent = emoji;
+          localStorage.setItem("shipGamesProfileAvatar", emoji);
+          avatarButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+
+      loadProfile();
+    })();
+
+    // HIGHSCORES
+    (function initHighscores() {
+      const clickLabel = document.getElementById("clickHighscoreLabel");
+      const harborLabel = document.getElementById("harborHighscoreLabel");
+
+      const clickBest = localStorage.getItem("clickGameBestScore");
+      if (clickBest !== null && clickBest !== "" && !isNaN(Number(clickBest))) {
+        clickLabel.textContent = `${clickBest} punten`;
+      } else {
+        clickLabel.textContent = "nog geen score";
+      }
+
+      const harborBest = localStorage.getItem("harborGameBestScore");
+      if (harborBest !== null && harborBest !== "" && !isNaN(Number(harborBest))) {
+        harborLabel.textContent = `${harborBest} punten`;
+      } else {
+        harborLabel.textContent = "nog geen score";
+      }
     })();
 
     // SORT POPUP + SORTEREN
@@ -752,6 +1043,13 @@
         closeOverlay();
       });
     })();
+
+    // Opmerking voor je games:
+    // Gebruik in click-game en harbor:
+    // const naam = localStorage.getItem("shipGamesProfileName") || "Kapitein";
+    // en sla highscores op als:
+    // localStorage.setItem("clickGameBestScore", score);
+    // localStorage.setItem("harborGameBestScore", score);
   </script>
 </body>
 </html>
