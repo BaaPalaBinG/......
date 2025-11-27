@@ -1,274 +1,757 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Click Challenge Game</title>
+  <title>Ship Games Launcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
+    /* THEMA-KLEUREN */
     :root {
-      --bg: #0f172a;
-      --bg-card: #020617;
-      --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.15);
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --danger: #ef4444;
+      --bg: #0b1120;
+      --sea: #1d4ed8;
+      --card: #020617;
+      --card-soft: #020617;
+      --accent: #fbbf24;
+      --accent-strong: #f59e0b;
+      --text: #f9fafb;
+      --muted: #e5e7eb;
+      --muted-soft: #cbd5f5;
+      --border: rgba(30, 64, 175, 0.9);
+      --wave: rgba(59, 130, 246, 0.15);
+      --chip-bg: rgba(15, 23, 42, 0.8);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    [data-theme="light"] {
+      --bg: #e0f2fe;
+      --sea: #38bdf8;
+      --card: #ffffff;
+      --card-soft: #f9fafb;
+      --accent: #f97316;
+      --accent-strong: #ea580c;
+      --text: #0f172a;
+      --muted: #4b5563;
+      --muted-soft: #6b7280;
+      --border: rgba(148, 163, 184, 1);
+      --wave: rgba(56, 189, 248, 0.15);
+      --chip-bg: #eff6ff;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(to bottom, var(--sea) 0, var(--bg) 45%);
+      color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, #020617 50%, #000 100%);
-      color: var(--text);
+      padding: 16px;
+      transition: background 0.25s ease, color 0.25s ease;
     }
 
-    .card {
-      width: min(480px, 100% - 20px);
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
-      border-radius: 20px;
-      padding: 20px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      position: relative;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: 1.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    input {
-      flex: 1;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--text);
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      font: inherit;
-    }
-
-    .save-btn {
-      padding: 8px 12px;
-      background: var(--accent);
-      color: #022c22;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .primary-btn {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: #022c22;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .playfield {
-      margin-top: 14px;
-      height: 220px;
-      border-radius: 16px;
-      background: radial-gradient(circle, rgba(34, 197, 94, 0.15), rgba(15, 23, 42, 0.95));
-      border: 1px solid rgba(148, 163, 184, 0.6);
+    .shell {
+      width: min(920px, 100%);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border: 3px solid var(--border);
       position: relative;
       overflow: hidden;
     }
 
-    .target {
-      position: absolute;
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #22c55e, #16a34a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      color: #022c22;
-      transform: translate(-50%, -50%);
-      cursor: pointer;
+    .shell-inner {
+      position: relative;
+      z-index: 1;
+      padding: 12px 16px 16px;
     }
 
-    .hidden {
-      opacity: 0;
+    /* GOLVEN & DETAILS */
+    .wave-top {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 120px;
+      background:
+        radial-gradient(circle at 10% 120%, var(--wave) 0, transparent 55%),
+        radial-gradient(circle at 50% 140%, var(--wave) 0, transparent 55%),
+        radial-gradient(circle at 90% 125%, var(--wave) 0, transparent 55%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .rope-border {
+      position: absolute;
+      inset: 8px;
+      border-radius: 18px;
+      border: 2px dashed rgba(148, 163, 184, 0.7);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 720px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fcd34d, #f97316);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.9);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      margin: 2px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted-soft);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn,
+    .icon-btn {
+      border-radius: 999px;
+      border: 2px solid rgba(15, 23, 42, 0.35);
+      background: var(--chip-bg);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 7px 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition:
+        background 0.15s ease,
+        transform 0.08s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .pill-btn span.icon,
+    .icon-btn span.icon {
+      font-size: 1rem;
+    }
+
+    .pill-btn:hover,
+    .icon-btn:hover {
+      background: rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.5);
+    }
+
+    .icon-btn {
+      padding: 7px 8px;
+      min-width: 36px;
+      justify-content: center;
+    }
+
+    .icon-btn span.label {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .icon-btn span.label {
+        display: inline;
+      }
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag span.icon {
+      font-size: 1.1rem;
+    }
+
+    .grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      border-radius: 16px;
+      background: var(--card-soft);
+      border: 2px solid rgba(15, 23, 42, 0.35);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.8);
+      position: relative;
+      overflow: hidden;
+      padding: 11px 13px 13px;
+    }
+
+    [data-theme="light"] .card {
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(248, 250, 252, 0.9), transparent 60%);
+      opacity: 0.35;
       pointer-events: none;
     }
 
-    .stats {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: var(--muted);
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-header {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
     }
 
-    .message {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 0.85rem;
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-emoji {
+      font-size: 1.3rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 0.82rem;
       color: var(--muted);
     }
 
-    .danger {
-      color: var(--danger);
+    .label-pill {
+      font-size: 0.72rem;
+      background: rgba(15, 23, 42, 0.25);
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      white-space: nowrap;
+    }
+
+    [data-theme="light"] .label-pill {
+      background: rgba(239, 246, 255, 0.9);
+    }
+
+    .card-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 0.77rem;
+    }
+
+    .meta-chip {
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: var(--chip-bg);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .primary-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #1f2933;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow:
+        0 10px 18px rgba(15, 23, 42, 0.7),
+        0 0 0 2px rgba(15, 23, 42, 0.5);
+      text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.1s ease, filter 0.08s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow:
+        0 12px 22px rgba(15, 23, 42, 0.85),
+        0 0 0 2px rgba(15, 23, 42, 0.7);
+    }
+
+    .primary-btn:active {
+      transform: translateY(1px) scale(0.98);
+      filter: brightness(0.98);
+    }
+
+    footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    footer strong {
+      color: var(--accent);
+    }
+
+    /* SORT POPUP */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 20;
+    }
+
+    [data-theme="light"] .overlay {
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .overlay.visible {
+      display: flex;
+    }
+
+    .sort-dialog {
+      width: min(320px, 100%);
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      background: var(--card-soft);
+      box-shadow: var(--shadow);
+      padding: 12px 13px 10px;
+    }
+
+    .sort-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .sort-title {
+      font-size: 0.96rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 2px 4px;
+    }
+
+    .sort-body {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .sort-options {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sort-options li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+
+    .sort-options li:hover {
+      background: rgba(148, 163, 184, 0.18);
+    }
+
+    .sort-options input[type="radio"] {
+      accent-color: #22c55e;
+    }
+
+    .sort-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .text-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 5px 6px;
+    }
+
+    .text-btn.primary {
+      color: var(--accent-strong);
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="shell">
+    <div class="wave-top"></div>
+    <div class="rope-border"></div>
+    <div class="shell-inner">
+      <header>
+        <div class="title-block">
+          <div class="logo">🚢</div>
+          <div>
+            <h1>Ship Games</h1>
+            <p class="subtitle">
+              Kies je spel: snelle klik-actie of rustig patrouilleren in de haven.
+            </p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="sortBtn" class="pill-btn" type="button">
+            <span class="icon">⚓</span>
+            <span>Sorteren</span>
+          </button>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Thema wisselen">
+            <span class="icon" id="themeIcon">🌙</span>
+            <span class="label" id="themeLabel">Donker</span>
+          </button>
+          <div class="tag">
+            <span class="icon">🌊</span>
+            <span>Speel in je browser</span>
+          </div>
+        </div>
+      </header>
 
-    <h1>Click Challenge</h1>
+      <section id="gameGrid" class="grid">
+        <!-- GAME 1: CLICK GAME -->
+        <article
+          class="card"
+          data-name="Cargo Click Challenge"
+          data-difficulty="1"
+          data-length="short"
+          data-recommended="1"
+        >
+          <div class="card-inner">
+            <div class="card-header">
+              <div>
+                <div class="card-title-row">
+                  <span class="card-emoji">🟡</span>
+                  <div class="card-title">Cargo Click Challenge</div>
+                </div>
+                <div class="card-subtitle">
+                  Korte, snelle rondes. Klik zo veel mogelijk schepen binnen de tijd.
+                </div>
+              </div>
+              <div class="label-pill">Casual · V1.1</div>
+            </div>
+            <div class="card-body">
+              <p>
+                Vul je naam in, start een ronde van 30 seconden en jaag op een nieuwe highscore.
+                Leuk om even snel tussendoor te spelen.
+              </p>
+              <div class="meta-row">
+                <span class="meta-chip">⏱ 30s rondes</span>
+                <span class="meta-chip">📈 Highscore</span>
+                <span class="meta-chip">🖱 Klik-snelheid</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="click-game.html" class="primary-btn">
+                ▶ Start Cargo Click
+              </a>
+              <span>Kort & simpel</span>
+            </div>
+          </div>
+        </article>
 
-    <!-- NAAM INVOER -->
-    <div class="input-row">
-      <input id="nameInput" type="text" placeholder="Jouw naam..." />
-      <button class="save-btn" id="saveNameBtn">Opslaan</button>
+        <!-- GAME 2: HARBOR PATROL -->
+        <article
+          class="card"
+          data-name="Harbor Patrol"
+          data-difficulty="2"
+          data-length="long"
+          data-recommended="0"
+        >
+          <div class="card-inner">
+            <div class="card-header">
+              <div>
+                <div class="card-title-row">
+                  <span class="card-emoji">⚓</span>
+                  <div class="card-title">Harbor Patrol</div>
+                </div>
+                <div class="card-subtitle">
+                  Stuur je schip, klik vijanden weg en houd de haven veilig.
+                </div>
+              </div>
+              <div class="label-pill">Patrouille · V2.0</div>
+            </div>
+            <div class="card-body">
+              <p>
+                Beweeg met <strong>← →</strong> of <strong>A / D</strong>, klik vijandige schepen weg
+                en laat de vriendelijke door. Botsingen en piraten kosten levens.
+              </p>
+              <div class="meta-row">
+                <span class="meta-chip">🧭 Navigeren</span>
+                <span class="meta-chip">☠ Piraten & vijanden</span>
+                <span class="meta-chip">❤️ 3 levens</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <a href="harbor-patrol.html" class="primary-btn">
+                ▶ Start Harbor Patrol
+              </a>
+              <span>Meer spanning</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <footer>
+        <span>
+          Tip: <strong>Harbor Patrol</strong> → pijltjes of A/D · muis om vijanden te klikken.
+        </span>
+        <span>Alles draait lokaal in je browser, geen installatie nodig.</span>
+      </footer>
     </div>
+  </div>
 
-    <p id="welcomeText"></p>
-
-    <!-- STATS -->
-    <div class="stats">
-      <div>Score: <strong id="score">0</strong></div>
-      <div>Beste: <strong id="bestScore">0</strong></div>
-      <div>Tijd: <strong id="time">30</strong>s</div>
+  <!-- SORT POPUP -->
+  <div id="sortOverlay" class="overlay" aria-hidden="true">
+    <div class="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sortTitle">
+      <div class="sort-header">
+        <div class="sort-title" id="sortTitle">Sorteer spellen</div>
+        <button class="close-btn" type="button" id="sortCloseBtn">×</button>
+      </div>
+      <div class="sort-body">
+        <p>Kies hoe je de spellen wilt sorteren. Dit verandert alleen de volgorde in dit scherm.</p>
+        <ul class="sort-options" id="sortOptions">
+          <li data-value="recommended">
+            <input type="radio" name="sortMode" id="sortRecommended" value="recommended" checked />
+            <label for="sortRecommended">Aanbevolen volgorde</label>
+          </li>
+          <li data-value="difficulty">
+            <input type="radio" name="sortMode" id="sortDifficulty" value="difficulty" />
+            <label for="sortDifficulty">Moeilijkheid (makkelijk → lastig)</label>
+          </li>
+          <li data-value="name">
+            <input type="radio" name="sortMode" id="sortName" value="name" />
+            <label for="sortName">Naam (A → Z)</label>
+          </li>
+        </ul>
+        <div class="sort-footer">
+          <button type="button" class="text-btn" id="sortCancelBtn">Annuleer</button>
+          <button type="button" class="text-btn primary" id="sortApplyBtn">Toepassen</button>
+        </div>
+      </div>
     </div>
-
-    <!-- START KNOP -->
-    <button id="startBtn" class="primary-btn">Start ronde</button>
-
-    <!-- SPEELVELD -->
-    <div id="playfield" class="playfield">
-      <div id="target" class="target hidden">+1</div>
-    </div>
-
-    <p id="message" class="message">Vul eerst je naam in en druk op Start.</p>
   </div>
 
   <script>
-    const nameInput = document.getElementById("nameInput");
-    const saveNameBtn = document.getElementById("saveNameBtn");
-    const welcomeText = document.getElementById("welcomeText");
+    // THEMA TOGGLE
+    (function initTheme() {
+      const root = document.documentElement;
+      const btn = document.getElementById("themeToggle");
+      const iconEl = document.getElementById("themeIcon");
+      const labelEl = document.getElementById("themeLabel");
 
-    const startBtn = document.getElementById("startBtn");
-    const target = document.getElementById("target");
-    const playfield = document.getElementById("playfield");
-    const scoreEl = document.getElementById("score");
-    const bestScoreEl = document.getElementById("bestScore");
-    const timeEl = document.getElementById("time");
-    const messageEl = document.getElementById("message");
-
-    let username = "Speler";
-    let score = 0;
-    let bestScore = 0;
-    let timeLeft = 30;
-    let gameRunning = false;
-    let timerId = null;
-
-    // Naam ophalen
-    const savedName = localStorage.getItem("clickGameName");
-    if (savedName) {
-      username = savedName;
-      nameInput.value = savedName;
-      welcomeText.textContent = `Welkom terug, ${username}!`;
-    }
-
-    // Beste score ophalen
-    const savedBest = localStorage.getItem("clickGameBestScore");
-    if (savedBest) {
-      bestScore = Number(savedBest) || 0;
-      bestScoreEl.textContent = bestScore;
-    }
-
-    // Naam opslaan
-    saveNameBtn.addEventListener("click", () => {
-      username = nameInput.value.trim() || "Speler";
-      localStorage.setItem("clickGameName", username);
-      welcomeText.textContent = `Welkom, ${username}!`;
-    });
-
-    // Start spel
-    startBtn.addEventListener("click", () => {
-      if (gameRunning) return;
-
-      gameRunning = true;
-      score = 0;
-      timeLeft = 30;
-
-      scoreEl.textContent = score;
-      timeEl.textContent = timeLeft;
-
-      messageEl.textContent = `Succes, ${username}!`;
-
-      target.classList.remove("hidden");
-      randomPosition();
-
-      startBtn.disabled = true;
-
-      timerId = setInterval(() => {
-        timeLeft--;
-        timeEl.textContent = timeLeft;
-
-        if (timeLeft <= 0) endGame();
-      }, 1000);
-    });
-
-    function endGame() {
-      clearInterval(timerId);
-      gameRunning = false;
-      target.classList.add("hidden");
-
-      startBtn.disabled = false;
-      startBtn.textContent = "Nog een ronde";
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestScoreEl.textContent = bestScore;
-        localStorage.setItem("clickGameBestScore", bestScore);
-        messageEl.innerHTML = `🔥 <strong>${username}</strong>, nieuwe high score: ${score}!`;
-      } else {
-        messageEl.innerHTML = `<strong>${username}</strong> haalde ${score} hits.`;
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("launcherTheme", theme);
+        if (theme === "light") {
+          iconEl.textContent = "☀️";
+          labelEl.textContent = "Licht";
+        } else {
+          iconEl.textContent = "🌙";
+          labelEl.textContent = "Donker";
+        }
       }
-    }
 
-    // Klik op target
-    target.addEventListener("click", () => {
-      if (!gameRunning) return;
-      score++;
-      scoreEl.textContent = score;
-      randomPosition();
-    });
+      const stored = localStorage.getItem("launcherTheme");
+      if (stored === "light" || stored === "dark") {
+        applyTheme(stored);
+      } else {
+        applyTheme("dark");
+      }
 
-    // Willekeurige positie
-    function randomPosition() {
-      const rect = playfield.getBoundingClientRect();
-      const size = 52; // diameter van target
+      btn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+        applyTheme(current === "light" ? "dark" : "light");
+      });
+    })();
 
-      const x = Math.random() * (rect.width - size) + size / 2;
-      const y = Math.random() * (rect.height - size) + size / 2;
+    // SORT POPUP + SORTEREN
+    (function initSort() {
+      const sortBtn = document.getElementById("sortBtn");
+      const overlay = document.getElementById("sortOverlay");
+      const closeBtn = document.getElementById("sortCloseBtn");
+      const cancelBtn = document.getElementById("sortCancelBtn");
+      const applyBtn = document.getElementById("sortApplyBtn");
+      const optionsList = document.getElementById("sortOptions");
+      const grid = document.getElementById("gameGrid");
 
-      target.style.left = x + "px";
-      target.style.top = y + "px";
-    }
+      let currentSort = localStorage.getItem("launcherSortMode") || "recommended";
+
+      const currentRadio = document.querySelector(
+        `input[name="sortMode"][value="${currentSort}"]`
+      );
+      if (currentRadio) currentRadio.checked = true;
+
+      function openOverlay() {
+        overlay.classList.add("visible");
+        overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove("visible");
+        overlay.setAttribute("aria-hidden", "true");
+      }
+
+      sortBtn.addEventListener("click", openOverlay);
+      closeBtn.addEventListener("click", closeOverlay);
+      cancelBtn.addEventListener("click", closeOverlay);
+
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeOverlay();
+      });
+
+      optionsList.addEventListener("click", (e) => {
+        const li = e.target.closest("li[data-value]");
+        if (!li) return;
+        const value = li.getAttribute("data-value");
+        const input = li.querySelector(`input[value="${value}"]`);
+        if (input) input.checked = true;
+      });
+
+      function sortCards(mode) {
+        const cards = Array.from(grid.querySelectorAll(".card"));
+        let sorted = cards.slice();
+
+        if (mode === "difficulty") {
+          sorted.sort((a, b) => {
+            const da = Number(a.dataset.difficulty || 0);
+            const db = Number(b.dataset.difficulty || 0);
+            return da - db;
+          });
+        } else if (mode === "name") {
+          sorted.sort((a, b) => {
+            const na = (a.dataset.name || "").toLowerCase();
+            const nb = (b.dataset.name || "").toLowerCase();
+            return na.localeCompare(nb, "nl");
+          });
+        } else {
+          sorted.sort((a, b) => {
+            const ra = Number(a.dataset.recommended || 0);
+            const rb = Number(b.dataset.recommended || 0);
+            return rb - ra;
+          });
+        }
+
+        sorted.forEach((card) => grid.appendChild(card));
+      }
+
+      sortCards(currentSort);
+
+      applyBtn.addEventListener("click", () => {
+        const selected = document.querySelector('input[name="sortMode"]:checked');
+        if (!selected) return;
+        const mode = selected.value;
+        currentSort = mode;
+        localStorage.setItem("launcherSortMode", mode);
+        sortCards(mode);
+        closeOverlay();
+      });
+    })();
   </script>
 </body>
 </html>
