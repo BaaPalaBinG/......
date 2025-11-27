@@ -1,0 +1,948 @@
+[
+  {
+    "id": 1,
+    "title": "Romige Kip-Pasta",
+    "description": "Pasta met kip, room en Italiaanse smaken.",
+    "calories": 620,
+    "protein": 35,
+    "carbs": 60,
+    "fat": 22,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Bak kipfilet met ui en knoflook in olijfolie.",
+      "Voeg room toe en laat iets inkoken.",
+      "Breng op smaak met peper en zout en meng met de pasta."
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Rijst met Kip Teriyaki",
+    "description": "Zoet-hartige bowl met kip, rijst en paprika in sojasaus.",
+    "calories": 550,
+    "protein": 40,
+    "carbs": 60,
+    "fat": 12,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Bak kipblokjes in olijfolie.",
+      "Voeg ui, paprika en knoflook toe.",
+      "Blus af met sojasaus en een scheut water en laat iets inkoken.",
+      "Serveer de kip over de rijst."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Chili con Carne (simpel)",
+    "description": "Rundergehakt met bonen, mais en tomatensaus.",
+    "calories": 680,
+    "protein": 45,
+    "carbs": 65,
+    "fat": 20,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 35,
+    "steps": [
+      "Bak rundergehakt rul met ui en knoflook.",
+      "Voeg paprika, kidneybonen, mais en tomatensaus toe.",
+      "Laat 15 minuten zachtjes pruttelen.",
+      "Breng op smaak met peper en zout."
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Zalm met Broccoli & Citroen",
+    "description": "Gebakken zalm met gestoomde broccoli en citroen.",
+    "calories": 480,
+    "protein": 38,
+    "carbs": 10,
+    "fat": 28,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook of stoom de broccoli beetgaar.",
+      "Bestrooi de zalm met peper en zout.",
+      "Bak de zalm in olijfolie of boter.",
+      "Serveer met citroensap over de zalm."
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Omelet met Kaas & Spinazie",
+    "description": "Luchtige omelet met kaas en spinazie.",
+    "calories": 370,
+    "protein": 24,
+    "carbs": 5,
+    "fat": 26,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 15,
+    "steps": [
+      "Klop de eieren met een scheut melk.",
+      "Bak de spinazie kort in een pan.",
+      "Giet het eimengsel erbij en strooi de kaas erover.",
+      "Laat op laag vuur stollen tot de omelet gaar is."
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Pasta Pesto met Kip",
+    "description": "Snelle pasta met kip, pesto en tomaat.",
+    "calories": 650,
+    "protein": 38,
+    "carbs": 62,
+    "fat": 24,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Bak kipblokjes in olijfolie goudbruin.",
+      "Voeg tomaat toe en bak kort mee.",
+      "Roer de pesto door de warme pasta.",
+      "Meng alles en bestrooi met geraspte kaas en basilicum."
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Tonijn Pasta in Tomatensaus",
+    "description": "Comfort bowl met pasta, tonijn en tomaat.",
+    "calories": 600,
+    "protein": 35,
+    "carbs": 70,
+    "fat": 14,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta gaar.",
+      "Fruit ui en knoflook in olijfolie.",
+      "Voeg tomatensaus en tomatenpuree toe en laat pruttelen.",
+      "Roer de uitgelekte tonijn erdoor.",
+      "Meng met de pasta en breng op smaak."
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Kikkererwten Stoofpot",
+    "description": "Vega stoof van kikkererwten, tomaat en groenten.",
+    "calories": 520,
+    "protein": 20,
+    "carbs": 60,
+    "fat": 16,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Fruit ui, wortel en prei in olijfolie.",
+      "Voeg knoflook en kerriepoeder toe.",
+      "Voeg kikkererwten en tomatensaus toe.",
+      "Laat 15–20 minuten zachtjes stoven.",
+      "Breng op smaak met peper, zout en peterselie."
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Aardappel Ovenschotel met Broccoli & Kaas",
+    "description": "Romige ovenschotel met aardappel, broccoli en kaas.",
+    "calories": 750,
+    "protein": 28,
+    "carbs": 80,
+    "fat": 30,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 45,
+    "steps": [
+      "Verwarm de oven voor op 180°C.",
+      "Kook aardappelplakjes en broccoli kort voor.",
+      "Vet een ovenschaal in met boter en leg aardappel en broccoli in lagen.",
+      "Meng melk en room met knoflook, peper en zout en giet erover.",
+      "Bestrooi met kaas en bak tot de bovenkant goudbruin is."
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Wraps met Gehakt & Mais",
+    "description": "Mexicaans geïnspireerde wraps met gehakt en groenten.",
+    "calories": 700,
+    "protein": 32,
+    "carbs": 75,
+    "fat": 26,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Bak rundergehakt rul met ui en knoflook.",
+      "Voeg paprika, mais en tomatensaus toe.",
+      "Verwarm de wraps kort in een droge pan.",
+      "Vul de wraps met het mengsel en bestrooi met geraspte kaas.",
+      "Serveer eventueel met sla of komkommer."
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Kip Kerrieschotel met Rijst",
+    "description": "Romige kip in kerriesaus met rijst en groenten.",
+    "calories": 610,
+    "protein": 36,
+    "carbs": 68,
+    "fat": 18,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Fruit ui en knoflook in olie.",
+      "Voeg kipblokjes en kerriepoeder toe en bak goudbruin.",
+      "Blus af met room en een scheut water en laat inkoken.",
+      "Serveer de kip kerriesaus over de rijst."
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Vegetarische Pasta Pesto",
+    "description": "Pasta met pesto, tomaat en spinazie.",
+    "calories": 580,
+    "protein": 19,
+    "carbs": 70,
+    "fat": 22,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Fruit ui kort in olijfolie.",
+      "Voeg tomaat en spinazie toe en bak tot de spinazie slinkt.",
+      "Meng de pesto door de warme pasta.",
+      "Schep de groenten erdoor en garneer met geraspte kaas en basilicum."
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Zalm Pasta met Roomkaas",
+    "description": "Romige pasta met zalm, roomkaas en citroen.",
+    "calories": 670,
+    "protein": 32,
+    "carbs": 65,
+    "fat": 30,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta gaar.",
+      "Bak zalmblokjes kort in olijfolie.",
+      "Voeg ui en knoflook toe en fruit even mee.",
+      "Roer roomkaas en een scheut kookvocht door de pasta.",
+      "Meng de zalm erdoor en breng op smaak met citroen, peper en zout."
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Groente Rösti Schotel",
+    "description": "Krokante aardappel-rösti met groenten en kaas uit de oven.",
+    "calories": 720,
+    "protein": 22,
+    "carbs": 82,
+    "fat": 28,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 40,
+    "steps": [
+      "Verwarm de oven voor op 190°C.",
+      "Rasp aardappel en wortel en knijp overtollig vocht uit.",
+      "Meng met ui, ei en bloem tot een beslag.",
+      "Bak kleine rösti's voor in de pan en leg ze in een ovenschaal.",
+      "Bestrooi met kaas en bak goudbruin in de oven."
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Kruidige Tomatensoep met Gehaktballetjes",
+    "description": "Rijke tomatensoep met rundergehaktballetjes en groenten.",
+    "calories": 540,
+    "protein": 30,
+    "carbs": 45,
+    "fat": 22,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 35,
+    "steps": [
+      "Draai kleine gehaktballetjes van rundergehakt en paneermeel.",
+      "Fruit ui, wortel en selderij in een soeppan.",
+      "Voeg tomatensaus, tomatenpuree en bouillon toe en breng aan de kook.",
+      "Laat de gehaktballetjes in de soep garen.",
+      "Breng op smaak met peper, zout en peterselie."
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Ovenschotel met Kip en Broccoli",
+    "description": "Romige kip-broccoli schotel met kaas uit de oven.",
+    "calories": 690,
+    "protein": 38,
+    "carbs": 35,
+    "fat": 40,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 40,
+    "steps": [
+      "Verwarm de oven voor op 190°C.",
+      "Kook de broccoli kort voor.",
+      "Bak kipblokjes met ui en knoflook goudbruin.",
+      "Meng room en melk door het kipmengsel en giet in een ovenschaal met broccoli.",
+      "Bestrooi met kaas en bak tot goudbruin en bubbelend."
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Rijstsalade met Tonijn",
+    "description": "Koude rijstsalade met tonijn, komkommer en maïs.",
+    "calories": 520,
+    "protein": 25,
+    "carbs": 65,
+    "fat": 14,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de rijst en laat afkoelen.",
+      "Meng de rijst met uitgelekte tonijn en maïs.",
+      "Voeg blokjes komkommer en ui toe.",
+      "Meng met yoghurt of een beetje olie en citroensap.",
+      "Breng op smaak met peper en zout."
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Shakshuka met Ei",
+    "description": "Eieren gepocheerd in kruidige tomatensaus met groenten.",
+    "calories": 480,
+    "protein": 21,
+    "carbs": 32,
+    "fat": 26,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Fruit ui, paprika en knoflook in olijfolie.",
+      "Voeg tomatenpuree en tomatensaus toe en laat pruttelen.",
+      "Maak kuiltjes in de saus en breek de eieren erin.",
+      "Laat met een deksel op de pan garen tot het eiwit gestold is.",
+      "Serveer met brood of rijst."
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Kip Wraps Caesar Style",
+    "description": "Wraps met kip, sla, komkommer en een romige saus.",
+    "calories": 640,
+    "protein": 34,
+    "carbs": 60,
+    "fat": 26,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Bak kipfilet goudbruin in olijfolie en snijd in reepjes.",
+      "Meng yoghurt met geraspte kaas, knoflook en citroensap tot een saus.",
+      "Beleg de wraps met sla, komkommer en kip.",
+      "Lepel de saus erover.",
+      "Rol de wraps op en serveer direct."
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Groene Groente Roerbak met Rijst",
+    "description": "Snelle roerbak met broccoli, courgette en rijst.",
+    "calories": 540,
+    "protein": 17,
+    "carbs": 72,
+    "fat": 14,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Roerbak broccoli, courgette en ui in olie.",
+      "Voeg knoflook en sojasaus toe.",
+      "Meng de groenten door de rijst.",
+      "Breng op smaak met peper en eventueel peterselie."
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Zalm uit de Oven met Aardappel",
+    "description": "Ovenzalm met citroen, aardappelpartjes en groenten.",
+    "calories": 700,
+    "protein": 35,
+    "carbs": 55,
+    "fat": 34,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 35,
+    "steps": [
+      "Verwarm de oven voor op 190°C.",
+      "Snijd aardappels in partjes en meng met olie en peper en zout.",
+      "Leg aardappel en broccoli op een bakplaat en bak 10 minuten.",
+      "Leg de zalm erbij, besprenkel met citroen en olie en bak gaar.",
+      "Serveer direct van de plaat."
+    ]
+  },
+  {
+    "id": 22,
+    "title": "Kikkererwten Curry met Rijst",
+    "description": "Milde curry met kikkererwten, spinazie en rijst.",
+    "calories": 560,
+    "protein": 19,
+    "carbs": 75,
+    "fat": 14,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Fruit ui en knoflook in olie.",
+      "Voeg kerriepoeder en wortel toe en bak kort mee.",
+      "Roer kikkererwten en tomatensaus erdoor en laat pruttelen.",
+      "Voeg op het einde spinazie toe en laat slinken."
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Pasta met Spek en Champignons",
+    "description": "Rijke pasta met spekblokjes, champignons en room.",
+    "calories": 720,
+    "protein": 27,
+    "carbs": 68,
+    "fat": 34,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Bak spekblokjes uit in een droge pan.",
+      "Voeg champignons en ui toe en bak goudbruin.",
+      "Roer room erdoor en laat iets inkoken.",
+      "Meng met de pasta en breng op smaak."
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Broccolisoep met Kaas",
+    "description": "Romige broccolisoep met kaas en room.",
+    "calories": 430,
+    "protein": 18,
+    "carbs": 20,
+    "fat": 30,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Fruit ui in boter.",
+      "Voeg broccoli en een bouillonblokje met water toe.",
+      "Kook tot de broccoli zacht is.",
+      "Pureer de soep en roer room en kaas erdoor.",
+      "Breng op smaak met peper en zout."
+    ]
+  },
+  {
+    "id": 25,
+    "title": "Rundergehakt Ovenschotel met Aardappel",
+    "description": "Hartige ovenschotel met gehakt, groenten en aardappelpuree.",
+    "calories": 780,
+    "protein": 32,
+    "carbs": 82,
+    "fat": 32,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 45,
+    "steps": [
+      "Kook aardappelen gaar en maak puree met melk en boter.",
+      "Bak rundergehakt met ui, wortel en selderij.",
+      "Voeg tomatensaus en kruiden toe en laat kort pruttelen.",
+      "Schep het gehaktmengsel in een ovenschaal en dek af met puree.",
+      "Bak in de oven tot de bovenkant goudbruin is."
+    ]
+  },
+  {
+    "id": 26,
+    "title": "Frisse Komkommersalade met Yoghurt",
+    "description": "Licht bijgerecht met komkommer, yoghurt en kruiden.",
+    "calories": 150,
+    "protein": 6,
+    "carbs": 10,
+    "fat": 8,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 10,
+    "steps": [
+      "Snijd komkommer in dunne plakjes.",
+      "Meng yoghurt met knoflook, citroensap en peterselie.",
+      "Roer de komkommer erdoor.",
+      "Breng op smaak met peper en zout.",
+      "Serveer gekoeld als bijgerecht."
+    ]
+  },
+  {
+    "id": 27,
+    "title": "Tonijn Melt Tostis",
+    "description": "Gegrilde tostis met tonijn, kaas en ui.",
+    "calories": 560,
+    "protein": 28,
+    "carbs": 45,
+    "fat": 26,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 15,
+    "steps": [
+      "Meng tonijn met yoghurt of roomkaas en ui.",
+      "Beleg brood met het tonijnmengsel en geraspte kaas.",
+      "Leg de andere boterham erop.",
+      "Bak de tosti in een pan of tosti-ijzer tot de kaas gesmolten is.",
+      "Serveer direct."
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Rijst met Groenten en Ei",
+    "description": "Gebakken rijst met groenten en roerei.",
+    "calories": 590,
+    "protein": 22,
+    "carbs": 75,
+    "fat": 18,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de rijst en laat afkoelen.",
+      "Bak roerei van eieren in een pan en zet opzij.",
+      "Roerbak ui, wortel en maïs in olie.",
+      "Voeg de rijst en sojasaus toe en bak kort mee.",
+      "Roer het ei erdoor en serveer."
+    ]
+  },
+  {
+    "id": 29,
+    "title": "Gegrilde Paprika Pasta",
+    "description": "Pasta met gegrilde paprika, knoflook en kaas.",
+    "calories": 610,
+    "protein": 20,
+    "carbs": 75,
+    "fat": 20,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Rooster paprika in de oven of pan tot ze zacht zijn.",
+      "Kook de pasta al dente.",
+      "Fruit knoflook en ui in olijfolie.",
+      "Voeg paprika en tomatensaus toe en laat kort pruttelen.",
+      "Meng met de pasta en bestrooi met kaas en basilicum."
+    ]
+  },
+  {
+    "id": 30,
+    "title": "Snelle Kip Tikka Style",
+    "description": "Kruidige kip in yoghurtsaus met rijst.",
+    "calories": 640,
+    "protein": 38,
+    "carbs": 60,
+    "fat": 22,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Meng yoghurt met kerriepoeder, knoflook en citroensap.",
+      "Marineer kipblokjes kort in dit mengsel.",
+      "Bak de kip in olie tot gaar en licht gekleurd.",
+      "Serveer de kip met de rijst en eventueel extra yoghurt."
+    ]
+  },
+  {
+    "id": 31,
+    "title": "Mediterrane Rijst met Kip",
+    "description": "Rijst met kip, paprika, tomaat en kruiden.",
+    "calories": 600,
+    "protein": 34,
+    "carbs": 70,
+    "fat": 16,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Bak kipblokjes in olijfolie goudbruin.",
+      "Voeg ui, paprika en tomaat toe en bak kort mee.",
+      "Breng op smaak met peper, zout en peterselie.",
+      "Meng de kip en groenten door de rijst."
+    ]
+  },
+  {
+    "id": 32,
+    "title": "Citroen Zalm met Rijst",
+    "description": "Zachte zalm met citroen en rijst, simpel en snel.",
+    "calories": 530,
+    "protein": 32,
+    "carbs": 55,
+    "fat": 18,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Bestrooi de zalm met peper en zout.",
+      "Bak de zalm in olijfolie of boter tot net gaar.",
+      "Serveer met rijst en besprenkel met citroensap.",
+      "Garneer met peterselie."
+    ]
+  },
+  {
+    "id": 33,
+    "title": "Vegetarische Wraps met Bonen",
+    "description": "Wraps gevuld met kidneybonen, mais en groenten.",
+    "calories": 640,
+    "protein": 22,
+    "carbs": 78,
+    "fat": 20,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Fruit ui en knoflook in olie.",
+      "Voeg paprika, kidneybonen, mais en tomatensaus toe.",
+      "Laat 10 minuten pruttelen.",
+      "Vul de wraps met het bonenmengsel.",
+      "Serveer eventueel met sla en yoghurt."
+    ]
+  },
+  {
+    "id": 34,
+    "title": "Pasta met Broccoli en Room",
+    "description": "Romige pasta met broccoli en kaas.",
+    "calories": 620,
+    "protein": 24,
+    "carbs": 72,
+    "fat": 22,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Kook de broccoli kort mee in het pastawater.",
+      "Fruit ui en knoflook in boter.",
+      "Voeg room en een scheut kookvocht toe en roer de broccoli erdoor.",
+      "Meng met de pasta en bestrooi met kaas."
+    ]
+  },
+  {
+    "id": 35,
+    "title": "Kip uit de Oven met Paprika",
+    "description": "Geroosterde kip met paprika, ui en aardappel.",
+    "calories": 710,
+    "protein": 36,
+    "carbs": 60,
+    "fat": 30,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 40,
+    "steps": [
+      "Verwarm de oven voor op 190°C.",
+      "Snijd aardappel, paprika en ui in stukken.",
+      "Meng met olie, peper, zout en knoflook.",
+      "Leg de kipfilet erbij in een ovenschaal.",
+      "Rooster tot de kip gaar is en de aardappels krokant zijn."
+    ]
+  },
+  {
+    "id": 36,
+    "title": "Tonijn Rijstschotel uit de Pan",
+    "description": "Snelle eenpansschotel met rijst, tonijn en groenten.",
+    "calories": 580,
+    "protein": 28,
+    "carbs": 70,
+    "fat": 14,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de rijst of gebruik restjes rijst.",
+      "Fruit ui en wortel in olie.",
+      "Voeg maïs, tonijn en tomatensaus toe.",
+      "Roer de rijst erdoor en verwarm alles goed.",
+      "Breng op smaak met peper en zout."
+    ]
+  },
+  {
+    "id": 37,
+    "title": "Groente Frittata uit de Pan",
+    "description": "Dikke omelet met groenten en kaas.",
+    "calories": 520,
+    "protein": 26,
+    "carbs": 18,
+    "fat": 34,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Klop de eieren los met een scheut melk.",
+      "Bak ui, paprika en champignons kort.",
+      "Giet het eimengsel erbij en strooi kaas erover.",
+      "Laat op laag vuur garen met een deksel op de pan.",
+      "Serveer in punten."
+    ]
+  },
+  {
+    "id": 38,
+    "title": "Koude Pastasalade met Tonijn",
+    "description": "Frisse salade met pasta, tonijn en komkommer.",
+    "calories": 560,
+    "protein": 24,
+    "carbs": 70,
+    "fat": 16,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de pasta en spoel koud af.",
+      "Meng met tonijn, komkommer en maïs.",
+      "Voeg yoghurt of olie met citroen toe als dressing.",
+      "Breng op smaak met peper en zout.",
+      "Serveer koud."
+    ]
+  },
+  {
+    "id": 39,
+    "title": "Romige Kip Penne uit de Oven",
+    "description": "Penne met kip, tomaat en kaas uit de oven.",
+    "calories": 760,
+    "protein": 36,
+    "carbs": 80,
+    "fat": 28,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 40,
+    "steps": [
+      "Kook de pasta kort voor.",
+      "Bak kipblokjes met ui en knoflook.",
+      "Voeg tomatensaus en room toe en laat kort pruttelen.",
+      "Meng met de pasta en doe in een ovenschaal.",
+      "Bestrooi met kaas en bak goudbruin."
+    ]
+  },
+  {
+    "id": 40,
+    "title": "Ratatouille met Rijst",
+    "description": "Stoof van courgette, paprika en tomaat met rijst.",
+    "calories": 540,
+    "protein": 13,
+    "carbs": 72,
+    "fat": 18,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Kook de rijst gaar.",
+      "Bak ui en knoflook in olijfolie.",
+      "Voeg courgette, paprika en tomaat toe.",
+      "Laat zachtjes stoven tot de groenten zacht zijn.",
+      "Serveer de ratatouille met rijst."
+    ]
+  },
+  {
+    "id": 41,
+    "title": "Kipburger met Sla",
+    "description": "Zelfgemaakte kipburger met sla en yoghurt saus.",
+    "calories": 650,
+    "protein": 35,
+    "carbs": 40,
+    "fat": 32,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Maal of snijd kip fijn en meng met paneermeel en ei.",
+      "Vorm een burger en bak goudbruin in olie.",
+      "Meng yoghurt met knoflook en citroensap tot saus.",
+      "Serveer de burger met sla, komkommer en saus.",
+      "Eventueel op brood of een wrap."
+    ]
+  },
+  {
+    "id": 42,
+    "title": "Aardappelpartjes met Zalm en Sla",
+    "description": "Gebakken aardappelpartjes met zalm en frisse sla.",
+    "calories": 690,
+    "protein": 32,
+    "carbs": 60,
+    "fat": 30,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Snijd aardappels in partjes en bak in olie of in de oven.",
+      "Bestrooi zalm met peper en zout en bak kort.",
+      "Meng sla en komkommer met een simpele dressing.",
+      "Serveer de aardappels met de zalm en sla.",
+      "Besprenkel met citroen."
+    ]
+  },
+  {
+    "id": 43,
+    "title": "Spinazie Pasta met Roomkaas",
+    "description": "Romige pasta met spinazie en roomkaas.",
+    "calories": 610,
+    "protein": 22,
+    "carbs": 72,
+    "fat": 22,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 20,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Bak ui en knoflook in olie.",
+      "Voeg spinazie toe en laat slinken.",
+      "Roer roomkaas en een scheut kookvocht erdoor.",
+      "Meng met de pasta en breng op smaak."
+    ]
+  },
+  {
+    "id": 44,
+    "title": "Gehaktballetjes in Tomatensaus met Rijst",
+    "description": "Gehaktballetjes in kruidige tomatensaus met rijst.",
+    "calories": 680,
+    "protein": 34,
+    "carbs": 75,
+    "fat": 24,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 35,
+    "steps": [
+      "Draai kleine gehaktballetjes van rundergehakt en paneermeel.",
+      "Bak de balletjes rondom bruin.",
+      "Fruit ui en knoflook en voeg tomatensaus toe.",
+      "Laat de balletjes in de saus garen.",
+      "Serveer met rijst."
+    ]
+  },
+  {
+    "id": 45,
+    "title": "Groene Salade met Kikkererwten",
+    "description": "Salade met sla, kikkererwten, komkommer en yoghurt dressing.",
+    "calories": 380,
+    "protein": 15,
+    "carbs": 35,
+    "fat": 16,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 15,
+    "steps": [
+      "Spoel de kikkererwten af.",
+      "Meng sla met komkommer en ui.",
+      "Voeg de kikkererwten toe.",
+      "Maak een dressing van yoghurt, citroen en peterselie.",
+      "Meng door de salade en serveer."
+    ]
+  },
+  {
+    "id": 46,
+    "title": "Broodje Tonijnsalade",
+    "description": "Simpel broodje met tonijnsalade en komkommer.",
+    "calories": 420,
+    "protein": 22,
+    "carbs": 35,
+    "fat": 18,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 10,
+    "steps": [
+      "Meng tonijn met yoghurt of roomkaas.",
+      "Voeg fijngesneden ui en peterselie toe.",
+      "Beleg brood met de tonijnsalade.",
+      "Garneer met plakjes komkommer.",
+      "Serveer direct."
+    ]
+  },
+  {
+    "id": 47,
+    "title": "Eenvoudige Groentesoep",
+    "description": "Heldere soep met verschillende groenten.",
+    "calories": 260,
+    "protein": 10,
+    "carbs": 25,
+    "fat": 10,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Snijd wortel, prei en selderij klein.",
+      "Fruit de groenten kort in een beetje olie.",
+      "Voeg water en een bouillonblokje toe.",
+      "Laat de soep 15 minuten zacht koken.",
+      "Breng op smaak met peper en peterselie."
+    ]
+  },
+  {
+    "id": 48,
+    "title": "Spek en Ei Ontbijtschotel",
+    "description": "Hartige ontbijtschotel met spek, ei en aardappel.",
+    "calories": 720,
+    "protein": 30,
+    "carbs": 40,
+    "fat": 48,
+    "category": "meat",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Bak spekblokjes uit in een pan.",
+      "Voeg blokjes aardappel toe en bak goudbruin.",
+      "Breek de eieren boven de pan.",
+      "Laat garen tot het eiwit gestold is.",
+      "Breng op smaak met peper en serveer."
+    ]
+  },
+  {
+    "id": 49,
+    "title": "Ovenschotel met Zalm en Groenten",
+    "description": "Zalm, broccoli en tomaat uit de oven met kaas.",
+    "calories": 680,
+    "protein": 34,
+    "carbs": 28,
+    "fat": 40,
+    "category": "fish",
+    "baseServings": 1,
+    "time": 30,
+    "steps": [
+      "Verwarm de oven voor op 190°C.",
+      "Kook de broccoli kort voor.",
+      "Leg zalm, broccoli en tomaat in een ovenschaal.",
+      "Besprenkel met olie en bestrooi met kaas.",
+      "Bak tot de zalm gaar is en de kaas gesmolten."
+    ]
+  },
+  {
+    "id": 50,
+    "title": "Pasta met Room en Champignons",
+    "description": "Klassieke romige pasta met champignons en ui.",
+    "calories": 640,
+    "protein": 20,
+    "carbs": 75,
+    "fat": 24,
+    "category": "vega",
+    "baseServings": 1,
+    "time": 25,
+    "steps": [
+      "Kook de pasta al dente.",
+      "Bak champignons en ui in boter.",
+      "Voeg knoflook en room toe en laat inkoken.",
+      "Breng op smaak met peper en zout.",
+      "Meng met de pasta en serveer."
+    ]
+  }
+]
