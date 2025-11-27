@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ship Games Launcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --sea: #1d4ed8;
+      --card: #020617;
+      --card-soft: #020617;
+      --accent: #fbbf24;
+      --accent-strong: #f59e0b;
+      --text: #f9fafb;
+      --muted: #e5e7eb;
+      --muted-soft: #cbd5f5;
+      --border: rgba(30, 64, 175, 0.9);
+      --wave: rgba(59, 130, 246, 0.15);
+      --chip-bg: rgba(15, 23, 42, 0.8);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+    }
+
+    [data-theme="light"] {
+      --bg: #e0f2fe;
+      --sea: #38bdf8;
+      --card: #ffffff;
+      --card-soft: #f9fafb;
+      --accent: #f97316;
+      --accent-strong: #ea580c;
+      --text: #0f172a;
+      --muted: #4b5563;
+      --muted-soft: #6b7280;
+      --border: rgba(148, 163, 184, 1);
+      --wave: rgba(56, 189, 248, 0.15);
+      --chip-bg: #eff6ff;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(to bottom, var(--sea) 0, var(--bg) 45%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .shell {
+      width: min(960px, 100%);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border: 3px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wave-top {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 120px;
+      background:
+        radial-gradient(circle at 10% 120%, var(--wave) 0, transparent 55%),
+        radial-gradient(circle at 50% 140%, var(--wave) 0, transparent 55%),
+        radial-gradient(circle at 90% 125%, var(--wave) 0, transparent 55%);
+      pointer-events: none;
+      opacity: 0.9;
+    }
+
+    .rope-border {
+      position: absolute;
+      inset: 8px;
+      border-radius: 18px;
+      border: 2px dashed rgba(148, 163, 184, 0.7);
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .shell-inner {
+      position: relative;
+      z-index: 1;
+      padding: 12px 16px 16px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 720px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .title-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #fcd34d, #f97316);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.9);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      margin: 2px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted-soft);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .icon-btn {
+      border-radius: 999px;
+      border: 2px solid rgba(15, 23, 42, 0.35);
+      background: var(--chip-bg);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 7px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition:
+        background 0.15s ease,
+        transform 0.08s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .icon-btn span.icon {
+      font-size: 1rem;
+    }
+
+    .icon-btn:hover {
+      background: rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.5);
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag span.icon {
+      font-size: 1.1rem;
+    }
+
+    .profile {
+      margin-top: 6px;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid rgba(15, 23, 42, 0.6);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.7fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    [data-theme="light"] .profile {
+      background: rgba(239, 246, 255, 0.9);
+      border-color: rgba(148, 163, 184, 0.9);
+    }
+
+    @media (max-width: 720px) {
+      .profile {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .profile-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #bfdbfe, #1d4ed8);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.8);
+    }
+
+    .profile-text-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .profile-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-soft);
+    }
+
+    .profile-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .profile-edit {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .profile-row input {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      padding: 6px 9px;
+      font-size: 0.82rem;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+    }
+
+    [data-theme="light"] .profile-row input {
+      background: #eff6ff;
+      color: #0f172a;
+    }
+
+    .profile-row button {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #1f2933;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.7);
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.74rem;
+      color: var(--muted-soft);
+    }
+
+    .avatar-option {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.6);
+      padding: 3px 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: var(--muted-soft);
+    }
+
+    [data-theme="light"] .avatar-option {
+      background: #e0f2fe;
+    }
+
+    .avatar-option span.icon {
+      font-size: 1rem;
+    }
+
+    .avatar-option.active {
+      border-color: var(--accent-strong);
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .grid {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .games-column {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 720px) {
+      .games-column {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      border-radius: 16px;
+      background: var(--card-soft);
+      border: 2px solid rgba(15, 23, 42, 0.35);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.8);
+      position: relative;
+      overflow: hidden;
+      padding: 11px 13px 13px;
+    }
+
+    [data-theme="light"] .card {
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-emoji {
+      font-size: 1.3rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .card-subtitle {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .label-pill {
+      font-size: 0.72rem;
+      background: rgba(15, 23, 42, 0.25);
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--muted);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      white-space: nowrap;
+    }
+
+    [data-theme="light"] .label-pill {
+      background: rgba(239, 246, 255, 0.9);
+    }
+
+    .card-body {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 0.77rem;
+    }
+
+    .meta-chip {
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: var(--chip-bg);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .primary-btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #1f2933;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow:
+        0 10px 18px rgba(15, 23, 42, 0.7),
+        0 0 0 2px rgba(15, 23, 42, 0.5);
+      text-decoration: none;
+      transition: transform 0.08s ease, box-shadow 0.1s ease, filter 0.08s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow:
+        0 12px 22px rgba(15, 23, 42, 0.85),
+        0 0 0 2px rgba(15, 23, 42, 0.7);
+    }
+
+    .highscore-label {
+      font-size: 0.76rem;
+      color: var(--muted-soft);
+    }
+
+    .highscore-label strong {
+      color: var(--accent);
+    }
+
+    .leaderboard-card {
+      border-radius: 16px;
+      background: var(--card-soft);
+      border: 2px solid rgba(15, 23, 42, 0.35);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.8);
+      padding: 11px 13px 13px;
+      font-size: 0.82rem;
+      color: var(--muted-soft);
+    }
+
+    .leaderboard-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .leaderboard-title span.icon {
+      font-size: 1.1rem;
+    }
+
+    .leaderboard-subtitle {
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+
+    .leaderboard-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .lb-block-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .lb-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      font-size: 0.8rem;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    .lb-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .lb-empty {
+      font-size: 0.78rem;
+      opacity: 0.8;
+    }
+
+    footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    footer strong {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="wave-top"></div>
+    <div class="rope-border"></div>
+    <div class="shell-inner">
+      <header>
+        <div class="title-block">
+          <div class="logo">🚢</div>
+          <div>
+            <h1>Ship Games</h1>
+            <p class="subtitle">
+              Kies je spel, vul je naam in en jaag op een nieuwe highscore.
+            </p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Thema wisselen">
+            <span class="icon" id="themeIcon">🌙</span>
+            <span class="label" id="themeLabel">Donker</span>
+          </button>
+          <div class="tag">
+            <span class="icon">🌊</span>
+            <span>Alles draait in je browser</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="profile">
+        <div class="profile-main">
+          <div id="profileAvatar" class="profile-avatar">🚢</div>
+          <div class="profile-text-main">
+            <div class="profile-label">Jouw account</div>
+            <div id="profileNameDisplay" class="profile-name">Gast kapitein</div>
+          </div>
+        </div>
+        <div class="profile-edit">
+          <div class="profile-row">
+            <input
+              id="profileNameInput"
+              type="text"
+              placeholder="Typ hier je naam (bijv. Kapitein Alex)"
+            />
+            <button id="profileSaveBtn" type="button">Opslaan</button>
+          </div>
+          <div class="avatar-row">
+            <span>Avatar:</span>
+            <button type="button" class="avatar-option active" data-emoji="🚢">
+              <span class="icon">🚢</span>
+              <span>Schip</span>
+            </button>
+            <button type="button" class="avatar-option" data-emoji="⚓">
+              <span class="icon">⚓</span>
+              <span>Kapitein</span>
+            </button>
+            <button type="button" class="avatar-option" data-emoji="⛴️">
+              <span class="icon">⛴️</span>
+              <span>Veerboot</span>
+            </button>
+            <button type="button" class="avatar-option" data-emoji="🛟">
+              <span class="icon">🛟</span>
+              <span>Redder</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="games-column">
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-header">
+                <div>
+                  <div class="card-title-row">
+                    <span class="card-emoji">🟡</span>
+                    <div class="card-title">Cargo Click Challenge</div>
+                  </div>
+                  <div class="card-subtitle">
+                    Korte, snelle rondes. Klik zo veel mogelijk schepen binnen de tijd.
+                  </div>
+                </div>
+                <div class="label-pill">Casual · Build 0.4</div>
+              </div>
+              <div class="card-body">
+                <p>
+                  30 seconden, één doel: zoveel mogelijk schepen raken. Perfect om even snel te spelen.
+                </p>
+                <div class="meta-row">
+                  <span class="meta-chip">⏱ 30s rondes</span>
+                  <span class="meta-chip">📈 Highscores</span>
+                  <span class="meta-chip">🖱 Klik-snelheid</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="click-game.html" class="primary-btn">
+                  ▶ Start Cargo Click
+                </a>
+                <span class="highscore-label">
+                  Jouw beste: <strong id="clickBestLabel">nog geen score</strong>
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-inner">
+              <div class="card-header">
+                <div>
+                  <div class="card-title-row">
+                    <span class="card-emoji">⚓</span>
+                    <div class="card-title">Harbor Patrol</div>
+                  </div>
+                  <div class="card-subtitle">
+                    Stuur je schip, klik vijanden weg en houd de haven veilig.
+                  </div>
+                </div>
+                <div class="label-pill">Patrouille · Build 0.4</div>
+              </div>
+              <div class="card-body">
+                <p>
+                  Beweeg met <strong>← →</strong> of <strong>A / D</strong>, klik piraten weg en laat
+                  de vriendelijke schepen passeren.
+                </p>
+                <div class="meta-row">
+                  <span class="meta-chip">🧭 Navigeren</span>
+                  <span class="meta-chip">☠ Piraten & vijanden</span>
+                  <span class="meta-chip">❤️ 3 levens</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="harbor-patrol.html" class="primary-btn">
+                  ▶ Start Harbor Patrol
+                </a>
+                <span class="highscore-label">
+                  Jouw beste: <strong id="harborBestLabel">nog geen score</strong>
+                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="leaderboard-card">
+          <div class="leaderboard-title">
+            <span class="icon">🏆</span>
+            <span>Lokale highscores</span>
+          </div>
+          <div class="leaderboard-subtitle">
+            Worden opgeslagen in je browser. Later kunnen we dit koppelen aan een online leaderboard.
+          </div>
+          <div class="leaderboard-columns">
+            <div>
+              <div class="lb-block-title">Cargo Click – Top 5</div>
+              <ol id="clickLeaderboard" class="lb-list"></ol>
+            </div>
+            <div>
+              <div class="lb-block-title">Harbor Patrol – Top 5</div>
+              <ol id="harborLeaderboard" class="lb-list"></ol>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <footer>
+        <span>
+          Tip: begin met <strong>Cargo Click</strong> om de besturing te voelen, stap dan over op
+          <strong>Harbor Patrol</strong>.
+        </span>
+        <span>Versie 0.4 · Alles draait lokaal, geen account nodig.</span>
+      </footer>
+    </div>
+  </div>
+
+  <script src="highscore-service.js"></script>
+  <script>
+    (function initTheme() {
+      const root = document.documentElement;
+      const btn = document.getElementById("themeToggle");
+      const iconEl = document.getElementById("themeIcon");
+      const labelEl = document.getElementById("themeLabel");
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("launcherTheme", theme);
+        if (theme === "light") {
+          iconEl.textContent = "☀️";
+          labelEl.textContent = "Licht";
+        } else {
+          iconEl.textContent = "🌙";
+          labelEl.textContent = "Donker";
+        }
+      }
+
+      const stored = localStorage.getItem("launcherTheme");
+      if (stored === "light" || stored === "dark") {
+        applyTheme(stored);
+      } else {
+        applyTheme("dark");
+      }
+
+      btn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+        applyTheme(current === "light" ? "dark" : "light");
+      });
+    })();
+
+    (function initProfile() {
+      const nameDisplay = document.getElementById("profileNameDisplay");
+      const nameInput = document.getElementById("profileNameInput");
+      const saveBtn = document.getElementById("profileSaveBtn");
+      const avatarEl = document.getElementById("profileAvatar");
+      const avatarButtons = document.querySelectorAll(".avatar-option");
+
+      function loadProfile() {
+        const savedName = localStorage.getItem("shipGamesProfileName");
+        const savedAvatar = localStorage.getItem("shipGamesProfileAvatar");
+
+        if (savedName && savedName.trim() !== "") {
+          nameDisplay.textContent = savedName;
+          nameInput.value = savedName;
+        } else {
+          nameDisplay.textContent = "Gast kapitein";
+        }
+
+        let avatarEmoji = "🚢";
+        if (savedAvatar) avatarEmoji = savedAvatar;
+        avatarEl.textContent = avatarEmoji;
+
+        avatarButtons.forEach((btn) => {
+          const emoji = btn.getAttribute("data-emoji");
+          btn.classList.toggle("active", emoji === avatarEmoji);
+        });
+      }
+
+      function saveProfile() {
+        const rawName = nameInput.value.trim();
+        const name = rawName || "Kapitein";
+        nameDisplay.textContent = name;
+        localStorage.setItem("shipGamesProfileName", name);
+      }
+
+      saveBtn.addEventListener("click", saveProfile);
+      nameInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          saveProfile();
+        }
+      });
+
+      avatarButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const emoji = btn.getAttribute("data-emoji");
+          avatarEl.textContent = emoji;
+          localStorage.setItem("shipGamesProfileAvatar", emoji);
+          avatarButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+
+      loadProfile();
+    })();
+
+    (function initPersonalBests() {
+      const clickLabel = document.getElementById("clickBestLabel");
+      const harborLabel = document.getElementById("harborBestLabel");
+
+      const clickBest = localStorage.getItem("clickGameBestScore");
+      if (clickBest !== null && clickBest !== "" && !isNaN(Number(clickBest))) {
+        clickLabel.textContent = `${clickBest} punten`;
+      } else {
+        clickLabel.textContent = "nog geen score";
+      }
+
+      const harborBest = localStorage.getItem("harborGameBestScore");
+      if (harborBest !== null && harborBest !== "" && !isNaN(Number(harborBest))) {
+        harborLabel.textContent = `${harborBest} punten`;
+      } else {
+        harborLabel.textContent = "nog geen score";
+      }
+    })();
+
+    (function initLeaderboards() {
+      const clickList = document.getElementById("clickLeaderboard");
+      const harborList = document.getElementById("harborLeaderboard");
+
+      function renderList(el, rows) {
+        el.innerHTML = "";
+        if (!rows || rows.length === 0) {
+          const li = document.createElement("li");
+          li.className = "lb-empty";
+          li.textContent = "Nog geen scores.";
+          el.appendChild(li);
+          return;
+        }
+        rows.forEach((row, i) => {
+          const li = document.createElement("li");
+          const left = document.createElement("span");
+          left.textContent = `${i + 1}. ${row.name}`;
+          const right = document.createElement("span");
+          right.textContent = row.score;
+          li.appendChild(left);
+          li.appendChild(right);
+          el.appendChild(li);
+        });
+      }
+
+      if (!window.HighscoreService) return;
+
+      const clickRows = HighscoreService.fetchTopScores(
+        HighscoreService.GAME_IDS.CLICK,
+        5
+      );
+      renderList(clickList, clickRows);
+
+      const harborRows = HighscoreService.fetchTopScores(
+        HighscoreService.GAME_IDS.HARBOR,
+        5
+      );
+      renderList(harborList, harborRows);
+    })();
+  </script>
+</body>
+</html>
