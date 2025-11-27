@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Ship Games Launcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
+      /* Dark theme (default) */
       --bg: #020617;
-      --card: #020617;
+      --bg-elevated: #020617;
       --accent: #22c55e;
-      --accent-soft: rgba(34, 197, 94, 0.15);
+      --accent-soft: rgba(34, 197, 94, 0.12);
       --text: #e5e7eb;
       --muted: #9ca3af;
-      --border: rgba(148, 163, 184, 0.4);
+      --border: rgba(148, 163, 184, 0.45);
+      --shadow-strong: 0 22px 60px rgba(0, 0, 0, 0.8);
+      --chip-bg: rgba(15, 23, 42, 0.95);
+    }
+
+    [data-theme="light"] {
+      --bg: #f3f4f6;
+      --bg-elevated: #ffffff;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.1);
+      --text: #0f172a;
+      --muted: #6b7280;
+      --border: rgba(148, 163, 184, 0.6);
+      --shadow-strong: 0 18px 48px rgba(15, 23, 42, 0.12);
+      --chip-bg: #f3f4f6;
     }
 
     * {
@@ -23,23 +38,24 @@
       margin: 0;
       min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
+      background:
+        radial-gradient(circle at top, rgba(148, 163, 184, 0.18) 0, transparent 55%),
+        var(--bg);
       color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
     .shell {
       width: min(960px, 100%);
-      border-radius: 24px;
-      padding: 20px 20px 24px;
+      border-radius: 20px;
+      padding: 18px 18px 20px;
       border: 1px solid var(--border);
-      background: radial-gradient(circle at top, #020617 0, #020617 65%);
-      box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.8),
-        0 0 0 1px rgba(15, 23, 42, 0.9);
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow-strong);
       position: relative;
       overflow: hidden;
     }
@@ -49,11 +65,11 @@
       position: absolute;
       inset: -40%;
       background:
-        radial-gradient(circle at 0 0, rgba(34, 197, 94, 0.18), transparent 55%),
-        radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.18), transparent 55%);
-      mix-blend-mode: screen;
+        radial-gradient(circle at 0 0, var(--accent-soft), transparent 60%),
+        radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.15), transparent 60%);
       pointer-events: none;
       opacity: 0.9;
+      mix-blend-mode: screen;
     }
 
     header {
@@ -63,7 +79,7 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
     }
 
     .title-block {
@@ -82,39 +98,79 @@
       justify-content: center;
       font-weight: 800;
       color: #022c22;
-      box-shadow: 0 0 22px rgba(34, 197, 94, 0.9);
-      font-size: 0.95rem;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.9);
+      font-size: 1.05rem;
     }
 
     h1 {
       margin: 0;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
     }
 
     .subtitle {
-      margin: 0;
-      font-size: 0.86rem;
+      margin: 2px 0 0;
+      font-size: 0.84rem;
       color: var(--muted);
+      max-width: 420px;
     }
 
-    .tag {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 6px 10px;
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn,
+    .icon-btn {
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--chip-bg);
       color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
       white-space: nowrap;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+    }
+
+    .pill-btn span.icon,
+    .icon-btn span.icon {
+      font-size: 0.95rem;
+    }
+
+    .pill-btn:hover,
+    .icon-btn:hover {
+      background: rgba(148, 163, 184, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .icon-btn {
+      padding: 6px 8px;
+      min-width: 34px;
+      justify-content: center;
+    }
+
+    .icon-btn span.label {
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .icon-btn span.label {
+        display: inline;
+      }
     }
 
     .grid {
       position: relative;
       z-index: 1;
-      margin-top: 16px;
+      margin-top: 10px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
@@ -128,27 +184,47 @@
         flex-direction: column;
         align-items: flex-start;
       }
+      .header-actions {
+        align-self: stretch;
+        justify-content: space-between;
+      }
     }
 
     .card {
-      border-radius: 18px;
+      border-radius: 16px;
       border: 1px solid var(--border);
-      background: radial-gradient(circle at top, #020617 0, #020617 70%);
-      padding: 14px 14px 16px;
-      box-shadow:
-        0 16px 40px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(15, 23, 42, 0.9);
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.06),
+        rgba(15, 23, 42, 0.02)
+      );
+      padding: 12px 13px 14px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.35);
       position: relative;
       overflow: hidden;
+    }
+
+    [data-theme="light"] .card {
+      background: linear-gradient(
+        145deg,
+        rgba(243, 244, 246, 0.9),
+        rgba(249, 250, 251, 0.95)
+      );
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
 
     .card::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.15), transparent 60%);
-      opacity: 0.8;
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.16), transparent 60%);
+      opacity: 0.9;
       pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .card-header {
@@ -156,9 +232,7 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 8px;
-      position: relative;
-      z-index: 1;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-title {
@@ -166,7 +240,7 @@
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .card-subtitle {
@@ -177,19 +251,17 @@
     .label-pill {
       font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 4px 8px;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.95);
+      background: var(--chip-bg);
       color: var(--muted);
       white-space: nowrap;
     }
 
     .card-body {
-      position: relative;
-      z-index: 1;
-      margin-top: 6px;
+      margin-top: 4px;
       font-size: 0.8rem;
       color: var(--muted);
     }
@@ -198,7 +270,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 7px;
       font-size: 0.75rem;
     }
 
@@ -206,17 +278,17 @@
       padding: 3px 7px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--chip-bg);
     }
 
     .card-footer {
-      position: relative;
-      z-index: 1;
-      margin-top: 10px;
+      margin-top: 9px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
+      font-size: 0.74rem;
+      color: var(--muted);
     }
 
     .primary-btn {
@@ -228,15 +300,15 @@
       color: #022c22;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      font-size: 0.74rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       box-shadow:
-        0 12px 30px rgba(22, 163, 74, 0.7),
+        0 10px 26px rgba(22, 163, 74, 0.7),
         0 0 0 1px rgba(21, 128, 61, 0.9);
       transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
       text-decoration: none;
@@ -251,21 +323,15 @@
       transform: translateY(1px) scale(0.99);
       filter: brightness(0.98);
       box-shadow:
-        0 6px 20px rgba(22, 163, 74, 0.6),
+        0 6px 18px rgba(22, 163, 74, 0.6),
         0 0 0 1px rgba(21, 128, 61, 1);
     }
 
-    .small-note {
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-align: right;
-    }
-
     footer {
-      margin-top: 14px;
+      margin-top: 12px;
       position: relative;
       z-index: 1;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
@@ -273,8 +339,112 @@
       flex-wrap: wrap;
     }
 
-    footer span strong {
+    footer strong {
       color: var(--accent);
+    }
+
+    /* SORT POPUP */
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 20;
+    }
+
+    .overlay.visible {
+      display: flex;
+    }
+
+    [data-theme="light"] .overlay {
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .sort-dialog {
+      width: min(320px, 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow-strong);
+      padding: 14px 14px 12px;
+    }
+
+    .sort-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .sort-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 2px 4px;
+    }
+
+    .sort-body {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .sort-options {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sort-options li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    .sort-options li:hover {
+      background: rgba(148, 163, 184, 0.14);
+    }
+
+    .sort-options input[type="radio"] {
+      accent-color: #22c55e;
+    }
+
+    .sort-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .text-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 5px 6px;
+    }
+
+    .text-btn.primary {
+      color: #16a34a;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -286,79 +456,261 @@
         <div>
           <h1>Ship Games</h1>
           <p class="subtitle">
-            Kies een modus: snelle click-challenge of volledige Harbor Patrol ervaring.
+            Kies een spel. Eén snelle click-challenge, één uitgebreide Harbor Patrol simulatie.
           </p>
         </div>
       </div>
-      <div class="tag">GitHub Pages collectie</div>
+      <div class="header-actions">
+        <button id="sortBtn" class="pill-btn" type="button">
+          <span class="icon">⇅</span>
+          <span>Sorteren</span>
+        </button>
+        <button id="themeToggle" class="icon-btn" type="button" aria-label="Thema wisselen">
+          <span class="icon" id="themeIcon">🌙</span>
+          <span class="label" id="themeLabel">Donker</span>
+        </button>
+      </div>
     </header>
 
-    <section class="grid">
+    <section id="gameGrid" class="grid">
       <!-- GAME 1: CLICK GAME -->
-      <article class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Cargo Click Challenge</div>
-            <div class="card-subtitle">
-              Simpele maar snelle click-game. Klik zoveel mogelijk containers/schepen binnen de tijd.
+      <article
+        class="card"
+        data-name="Cargo Click Challenge"
+        data-difficulty="1"
+        data-length="short"
+        data-recommended="1"
+      >
+        <div class="card-inner">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Cargo Click Challenge</div>
+              <div class="card-subtitle">
+                Simpel en snel. Klik zoveel mogelijk schepen/containers binnen de tijd.
+              </div>
+            </div>
+            <div class="label-pill">Casual · V1.1</div>
+          </div>
+          <div class="card-body">
+            <p>
+              Vul je naam in, start een ronde van 30 seconden en jaag op de hoogste score.
+              Ideaal voor korte potjes of een snelle battle met vrienden.
+            </p>
+            <div class="meta-row">
+              <span class="meta-chip">⏱ 30s rondes</span>
+              <span class="meta-chip">📈 Highscore opslag</span>
+              <span class="meta-chip">🖱 Focus op kliksnelheid</span>
             </div>
           </div>
-          <div class="label-pill">V1.1 · Casual</div>
-        </div>
-        <div class="card-body">
-          <p>
-            Kies je naam, start de ronde en klik zo snel mogelijk. Perfect om even kort te spelen of high scores
-            te vergelijken.
-          </p>
-          <div class="meta-row">
-            <span class="meta-chip">⏱ 30s rondes</span>
-            <span class="meta-chip">📈 Highscore opslag</span>
-            <span class="meta-chip">🖱 Pure klik-snelheid</span>
+          <div class="card-footer">
+            <a href="click-game.html" class="primary-btn">
+              ▶ Start Cargo Click
+            </a>
+            <span>Korte, snelle sessies</span>
           </div>
-        </div>
-        <div class="card-footer">
-          <a href="click-game.html" class="primary-btn">
-            ▶ Start Cargo Click
-          </a>
-          <div class="small-note">Aanrader voor snelle potjes</div>
         </div>
       </article>
 
       <!-- GAME 2: HARBOR PATROL -->
-      <article class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Harbor Patrol</div>
-            <div class="card-subtitle">
-              Navigeer je schip, klik vijanden weg en bescherm de haven tegen piraten en vijandelijke schepen.
+      <article
+        class="card"
+        data-name="Harbor Patrol"
+        data-difficulty="2"
+        data-length="long"
+        data-recommended="0"
+      >
+        <div class="card-inner">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Harbor Patrol</div>
+              <div class="card-subtitle">
+                Navigeer, klik vijandige schepen weg en bescherm de haven tegen piraten.
+              </div>
+            </div>
+            <div class="label-pill">Advanced · V2.0</div>
+          </div>
+          <div class="card-body">
+            <p>
+              Stuur met <strong>← →</strong> of <strong>A / D</strong>, klik vijandige schepen weg en
+              laat de vriendelijke door. Botsingen, piraten en glippende vijanden kosten levens.
+            </p>
+            <div class="meta-row">
+              <span class="meta-chip">🧭 Navigeren & ontwijken</span>
+              <span class="meta-chip">☠ Piraten & vijanden</span>
+              <span class="meta-chip">❤️ 3 levens</span>
             </div>
           </div>
-          <div class="label-pill">V2.0 · Advanced</div>
-        </div>
-        <div class="card-body">
-          <p>
-            Stuur met <strong>← →</strong> of <strong>A / D</strong>, klik vijandige schepen weg en laat de
-            vriendelijke door. Botsingen, piraten en glippende vijanden kosten levens!
-          </p>
-          <div class="meta-row">
-            <span class="meta-chip">🧭 Navigatie & ontwijken</span>
-            <span class="meta-chip">☠ Piraten & vijanden</span>
-            <span class="meta-chip">❤️ 3 levens</span>
+          <div class="card-footer">
+            <a href="harbor-patrol.html" class="primary-btn">
+              ▶ Start Harbor Patrol
+            </a>
+            <span>Meer diepgang & spanning</span>
           </div>
-        </div>
-        <div class="card-footer">
-          <a href="harbor-patrol.html" class="primary-btn">
-            ▶ Start Harbor Patrol
-          </a>
-          <div class="small-note">Voor langere sessies</div>
         </div>
       </article>
     </section>
 
     <footer>
-      <span>Bedieningshints: <strong>Harbor Patrol</strong> → pijltjes of A/D · muis om vijanden te klikken.</span>
-      <span>Alle games draaien in je browser, geen installatie nodig.</span>
+      <span>
+        Tip: <strong>Harbor Patrol</strong> → pijltjestoetsen of A/D · muis om vijanden te klikken.
+      </span>
+      <span>Alles draait in je browser, geen installatie nodig.</span>
     </footer>
   </main>
+
+  <!-- SORT POPUP -->
+  <div id="sortOverlay" class="overlay" aria-hidden="true">
+    <div class="sort-dialog" role="dialog" aria-modal="true" aria-labelledby="sortTitle">
+      <div class="sort-header">
+        <div class="sort-title" id="sortTitle">Sorteer spellen</div>
+        <button class="close-btn" type="button" id="sortCloseBtn">×</button>
+      </div>
+      <div class="sort-body">
+        <p>Kies hoe je de spellen wilt ordenen. Dit verandert alleen de volgorde in dit overzicht.</p>
+        <ul class="sort-options" id="sortOptions">
+          <li data-value="recommended">
+            <input type="radio" name="sortMode" id="sortRecommended" value="recommended" checked />
+            <label for="sortRecommended">Aanbevolen volgorde</label>
+          </li>
+          <li data-value="difficulty">
+            <input type="radio" name="sortMode" id="sortDifficulty" value="difficulty" />
+            <label for="sortDifficulty">Moeilijkheid (van makkelijk naar lastig)</label>
+          </li>
+          <li data-value="name">
+            <input type="radio" name="sortMode" id="sortName" value="name" />
+            <label for="sortName">Naam (A-Z)</label>
+          </li>
+        </ul>
+        <div class="sort-footer">
+          <button type="button" class="text-btn" id="sortCancelBtn">Annuleer</button>
+          <button type="button" class="text-btn primary" id="sortApplyBtn">Toepassen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // THEMA TOGGLE
+    (function initTheme() {
+      const root = document.documentElement;
+      const btn = document.getElementById("themeToggle");
+      const iconEl = document.getElementById("themeIcon");
+      const labelEl = document.getElementById("themeLabel");
+
+      function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("launcherTheme", theme);
+        if (theme === "light") {
+          iconEl.textContent = "☀️";
+          labelEl.textContent = "Licht";
+        } else {
+          iconEl.textContent = "🌙";
+          labelEl.textContent = "Donker";
+        }
+      }
+
+      const stored = localStorage.getItem("launcherTheme");
+      if (stored === "light" || stored === "dark") {
+        applyTheme(stored);
+      } else {
+        applyTheme("dark");
+      }
+
+      btn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+        applyTheme(current === "light" ? "dark" : "light");
+      });
+    })();
+
+    // SORT POPUP & SORTEREN
+    (function initSort() {
+      const sortBtn = document.getElementById("sortBtn");
+      const overlay = document.getElementById("sortOverlay");
+      const closeBtn = document.getElementById("sortCloseBtn");
+      const cancelBtn = document.getElementById("sortCancelBtn");
+      const applyBtn = document.getElementById("sortApplyBtn");
+      const optionsList = document.getElementById("sortOptions");
+      const grid = document.getElementById("gameGrid");
+
+      let currentSort = localStorage.getItem("launcherSortMode") || "recommended";
+
+      // Zet beginstand radio
+      const currentRadio = document.querySelector(
+        `input[name="sortMode"][value="${currentSort}"]`
+      );
+      if (currentRadio) currentRadio.checked = true;
+
+      function openOverlay() {
+        overlay.classList.add("visible");
+        overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeOverlay() {
+        overlay.classList.remove("visible");
+        overlay.setAttribute("aria-hidden", "true");
+      }
+
+      sortBtn.addEventListener("click", openOverlay);
+      closeBtn.addEventListener("click", closeOverlay);
+      cancelBtn.addEventListener("click", closeOverlay);
+
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) {
+          closeOverlay();
+        }
+      });
+
+      optionsList.addEventListener("click", (e) => {
+        const li = e.target.closest("li[data-value]");
+        if (!li) return;
+        const value = li.getAttribute("data-value");
+        const input = li.querySelector(`input[value="${value}"]`);
+        if (input) {
+          input.checked = true;
+        }
+      });
+
+      function sortCards(mode) {
+        const cards = Array.from(grid.querySelectorAll(".card"));
+        let sorted = cards.slice();
+
+        if (mode === "difficulty") {
+          // data-difficulty: 1 = makkelijk, 2 = lastiger
+          sorted.sort((a, b) => {
+            const da = Number(a.dataset.difficulty || 0);
+            const db = Number(b.dataset.difficulty || 0);
+            return da - db;
+          });
+        } else if (mode === "name") {
+          sorted.sort((a, b) => {
+            const na = (a.dataset.name || "").toLowerCase();
+            const nb = (b.dataset.name || "").toLowerCase();
+            return na.localeCompare(nb, "nl");
+          });
+        } else {
+          // recommended: gebruik data-recommended (1 = eerst, 0 = daarna)
+          sorted.sort((a, b) => {
+            const ra = Number(a.dataset.recommended || 0);
+            const rb = Number(b.dataset.recommended || 0);
+            return rb - ra;
+          });
+        }
+
+        sorted.forEach((card) => grid.appendChild(card));
+      }
+
+      sortCards(currentSort);
+
+      applyBtn.addEventListener("click", () => {
+        const selected = document.querySelector('input[name="sortMode"]:checked');
+        if (!selected) return;
+        const mode = selected.value;
+        currentSort = mode;
+        localStorage.setItem("launcherSortMode", mode);
+        sortCards(mode);
+        closeOverlay();
+      });
+    })();
+  </script>
 </body>
 </html>
