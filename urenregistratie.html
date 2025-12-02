@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uren & Kilometers Registratie</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f2f2f2;
+      color: #222;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .nav-tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      background: #e0e0e0;
+      padding: 3px;
+    }
+
+    .nav-tabs button {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .nav-tabs button.active {
+      background: #ffffff;
+      box-shadow: 0 0 0 1px #d0d0d0;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 14px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      color: #555;
+      margin-bottom: 3px;
+    }
+
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #d0d0d0;
+      font-size: 0.85rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007aff;
+      box-shadow: 0 0 0 1px rgba(0,122,255,0.2);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    button.primary {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      background: #007aff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      border: 1px solid #d0d0d0;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    button.secondary.small {
+      padding: 6px 10px;
+      font-size: 0.75rem;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .small-hint {
+      font-size: 0.7rem;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .entry-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 0;
+      font-size: 0.8rem;
+    }
+
+    .entry-actions select {
+      max-width: 220px;
+    }
+
+    .entry-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 4px;
+    }
+
+    .entry-item {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .entry-item.locked {
+      background: #f0f0f5;
+      border-style: dashed;
+    }
+
+    .entry-left {
+      display: flex;
+      flex-direction: row;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .entry-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .entry-right {
+      font-size: 0.75rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #e8f0ff;
+      color: #1a3e90;
+      margin-right: 4px;
+    }
+
+    .lock-pill {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #ffe5b5;
+      color: #7a4a00;
+      margin-left: 4px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .totals {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .total-box {
+      flex: 1;
+      min-width: 120px;
+      background: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      padding: 10px;
+      font-size: 0.8rem;
+    }
+
+    .total-label {
+      color: #777;
+      font-size: 0.75rem;
+    }
+
+    .total-value {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .overview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      margin-top: 8px;
+    }
+
+    .overview-table th,
+    .overview-table td {
+      border-bottom: 1px solid #eee;
+      padding: 4px 3px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .overview-table th {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #555;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 0.9;
+    }
+
+    /* WACHTWOORD / LOCK SCREEN */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .lock-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 16px 16px;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+
+    .lock-card h2 {
+      margin: 0 0 4px;
+      font-size: 1.1rem;
+    }
+
+    .lock-card p {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .lock-card input[type="password"] {
+      margin-bottom: 10px;
+    }
+
+    .lock-hint {
+      font-size: 0.7rem;
+      color: #777;
+      margin-top: 6px;
+    }
+
+    .hours-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hours-row input[type="number"] {
+      flex: 1;
+    }
+
+    .hours-auto {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Uren & Kilometer Registratie</h1>
+    <div class="nav-tabs">
+      <button id="tabInput" class="active" type="button">Invoer</button>
+      <button id="tabOverview" type="button">Overzicht</button>
+    </div>
+  </header>
+
+  <!-- SCHERM 1: INVOER -->
+  <section id="screenInput" class="screen active">
+    <div class="card">
+      <div class="form-grid">
+        <div>
+          <label for="date">Datum</label>
+          <input id="date" type="date" />
+        </div>
+        <div>
+          <label for="timeFrom">Tijd van</label>
+          <input id="timeFrom" type="time" />
+        </div>
+        <div>
+          <label for="timeTo">Tijd tot</label>
+          <input id="timeTo" type="time" />
+        </div>
+        <div>
+          <label for="hours">Uren (h)</label>
+          <div class="hours-row">
+            <input id="hours" type="number" step="0.25" placeholder="Bijv. 8" />
+            <label class="hours-auto">
+              <input id="autoHours" type="checkbox" checked />
+              Auto
+            </label>
+          </div>
+        </div>
+        <div>
+          <label for="km">Kilometers (km)</label>
+          <input id="km" type="number" step="1" placeholder="Bijv. 245" />
+        </div>
+        <div>
+          <label for="client">Opdrachtgever</label>
+          <input id="client" type="text" list="clientList" placeholder="Bijv. Saybolt" />
+          <datalist id="clientList"></datalist>
+        </div>
+        <div>
+          <label for="job">Job / Locatie</label>
+          <input id="job" type="text" placeholder="Bijv. GISELA ESSBERGER" />
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button id="saveEntry" type="button" class="primary">Opslaan</button>
+        <button id="copyLast" type="button" class="secondary">
+          Kopieer laatste naar WhatsApp
+        </button>
+      </div>
+      <div class="small-hint">
+        Uren worden automatisch berekend op basis van tijd van/tot (ook over middernacht).<br />
+        Vink "Auto" uit als je de uren handmatig wilt overrulen.
+      </div>
+      <div class="small-hint" style="margin-top:6px;">
+        WhatsApp format:<br />
+        2-12<br />
+        23:00 - 07:00<br />
+        8 h.&nbsp;&nbsp;&nbsp;245 km<br />
+        Saybolt, GISELA ESSBERGER
+      </div>
+    </div>
+
+    <div class="card">
+      <strong class="section-title">Laatste registraties</strong>
+
+      <div class="entry-actions">
+        <select id="entryAction">
+          <option value="">Kies actie…</option>
+          <option value="delete">Verwijder geselecteerden</option>
+          <option value="lock">Lock geselecteerden (niet meer aanpasbaar)</option>
+        </select>
+        <button id="applyEntryAction" type="button" class="secondary small">Uitvoeren</button>
+      </div>
+
+      <div id="entryList" class="entry-list"></div>
+    </div>
+  </section>
+
+  <!-- SCHERM 2: OVERZICHT -->
+  <section id="screenOverview" class="screen">
+    <div class="card">
+      <div class="totals">
+        <div class="total-box">
+          <div class="total-label">Totaal uren</div>
+          <div id="totalHours" class="total-value">0 h</div>
+        </div>
+        <div class="total-box">
+          <div class="total-label">Totaal kilometers</div>
+          <div id="totalKm" class="total-value">0 km</div>
+        </div>
+      </div>
+
+      <div style="max-height:260px; overflow:auto;">
+        <div class="section-title">Alle registraties</div>
+        <table class="overview-table">
+          <thead>
+          <tr>
+            <th>Datum</th>
+            <th>Opdrachtgever</th>
+            <th>Job</th>
+            <th>Tijd</th>
+            <th>Uren</th>
+            <th>Km</th>
+          </tr>
+          </thead>
+          <tbody id="overviewBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Per maand per opdrachtgever</div>
+      <div style="max-height:260px; overflow:auto;">
+        <table class="overview-table">
+          <thead>
+          <tr>
+            <th>Maand</th>
+            <th>Opdrachtgever</th>
+            <th>Uren</th>
+            <th>Kilometers</th>
+          </tr>
+          </thead>
+          <tbody id="monthlyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- WACHTWOORD OVERLAY -->
+<div id="lockScreenApp" class="lock-screen">
+  <div class="lock-card">
+    <h2>Inloggen</h2>
+    <p id="lockMessage">Stel een wachtwoord in voor deze registratie.</p>
+    <input id="lockPassword" type="password" placeholder="Wachtwoord" />
+    <button id="lockSubmit" class="primary" type="button">OK</button>
+    <div class="lock-hint">
+      Wachtwoord wordt alleen lokaal op dit apparaat opgeslagen.
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast">Gekopieerd 👍</div>
+
+<script>
+  const STORAGE_KEY = "urenKmEntries_v2";
+  const PASS_KEY = "urenKmPass_v1";
+  const CLIENTS_KEY = "urenKmClients_v1";
+
+  // Elements
+  const tabInput = document.getElementById("tabInput");
+  const tabOverview = document.getElementById("tabOverview");
+  const screenInput = document.getElementById("screenInput");
+  const screenOverview = document.getElementById("screenOverview");
+
+  const dateInput = document.getElementById("date");
+  const timeFromInput = document.getElementById("timeFrom");
+  const timeToInput = document.getElementById("timeTo");
+  const hoursInput = document.getElementById("hours");
+  const autoHoursCheckbox = document.getElementById("autoHours");
+  const kmInput = document.getElementById("km");
+  const clientInput = document.getElementById("client");
+  const clientListEl = document.getElementById("clientList");
+  const jobInput = document.getElementById("job");
+
+  const saveEntryBtn = document.getElementById("saveEntry");
+  const copyLastBtn = document.getElementById("copyLast");
+  const entryListEl = document.getElementById("entryList");
+
+  const entryActionSelect = document.getElementById("entryAction");
+  const applyEntryActionBtn = document.getElementById("applyEntryAction");
+
+  const totalHoursEl = document.getElementById("totalHours");
+  const totalKmEl = document.getElementById("totalKm");
+  const overviewBodyEl = document.getElementById("overviewBody");
+  const monthlyBodyEl = document.getElementById("monthlyBody");
+
+  const toastEl = document.getElementById("toast");
+
+  const lockScreenEl = document.getElementById("lockScreenApp");
+  const lockMessageEl = document.getElementById("lockMessage");
+  const lockPasswordEl = document.getElementById("lockPassword");
+  const lockSubmitBtn = document.getElementById("lockSubmit");
+
+  let entries = [];
+  let clients = [];
+
+  // Load entries from localStorage
+  function loadEntries() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      entries = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(entries)) entries = [];
+    } catch {
+      entries = [];
+    }
+  }
+
+  // Load clients from localStorage
+  function loadClients() {
+    try {
+      const raw = localStorage.getItem(CLIENTS_KEY);
+      clients = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(clients)) clients = [];
+    } catch {
+      clients = [];
+    }
+  }
+
+  function saveEntries() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  }
+
+  function saveClients() {
+    localStorage.setItem(CLIENTS_KEY, JSON.stringify(clients));
+  }
+
+  // Date formatter: "2025-12-02" -> "2-12"
+  function formatDateShort(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const y = parts[0], m = parts[1], d = parts[2];
+    const dd = String(parseInt(d, 10));
+    const mm = String(parseInt(m, 10));
+    return dd + "-" + mm;
+  }
+
+  function formatMonthLabel(dateStr) {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const y = parts[0], m = parts[1];
+    const mm = String(parseInt(m, 10)).padStart(2, "0");
+    return mm + "-" + y;
+  }
+
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(() => toastEl.classList.remove("show"), 1800);
+  }
+
+  // Autocomplete lijst voor opdrachtgevers
+  function renderClientList() {
+    clientListEl.innerHTML = "";
+    clients.forEach(c => {
+      if (!c) return;
+      const opt = document.createElement("option");
+      opt.value = c;
+      clientListEl.appendChild(opt);
+    });
+  }
+
+  function addClientName(name) {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const exists = clients.some(c => c.toLowerCase() === trimmed.toLowerCase());
+    if (!exists) {
+      clients.push(trimmed);
+      saveClients();
+      renderClientList();
+    }
+  }
+
+  // Bereken uren op basis van tijd van/tot (ook over middernacht)
+  function computeHoursFromTimes() {
+    const from = timeFromInput.value;
+    const to = timeToInput.value;
+    if (!from || !to) return;
+
+    const [fh, fm] = from.split(":").map(Number);
+    const [th, tm] = to.split(":").map(Number);
+    if (isNaN(fh) || isNaN(fm) || isNaN(th) || isNaN(tm)) return;
+
+    let startMin = fh * 60 + fm;
+    let endMin = th * 60 + tm;
+
+    if (endMin <= startMin) {
+      // Over middernacht
+      endMin += 24 * 60;
+    }
+
+    const diffMin = endMin - startMin;
+    const hours = diffMin / 60;
+    const rounded = Math.round(hours * 100) / 100; // 2 decimalen
+    hoursInput.value = rounded.toString().replace(".", ",").replace(/,00$/, "");
+  }
+
+  // Render small list on input screen
+  function renderEntryList() {
+    entryListEl.innerHTML = "";
+    if (!entries.length) {
+      entryListEl.innerHTML = '<div style="font-size:0.8rem;color:#777;">Nog geen registraties.</div>';
+      return;
+    }
+
+    const sorted = [...entries].sort((a, b) => b.createdAt - a.createdAt); // latest first
+    for (const e of sorted.slice(0, 30)) {
+      const div = document.createElement("div");
+      div.className = "entry-item";
+      if (e.locked) div.classList.add("locked");
+
+      const left = document.createElement("div");
+      left.className = "entry-left";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "entry-check";
+      checkbox.dataset.id = e.id;
+      if (e.locked) {
+        checkbox.disabled = true;
+      }
+
+      const main = document.createElement("div");
+      main.className = "entry-main";
+
+      const line1 = document.createElement("div");
+      line1.innerHTML =
+        `<span class="pill">${formatDateShort(e.date)}</span>` +
+        `<span>${e.timeFrom || "?"} - ${e.timeTo || "?"}</span>`;
+      main.appendChild(line1);
+
+      const line2 = document.createElement("div");
+      line2.textContent = `${e.client || "-"}, ${e.job || "-"}`;
+
+      if (e.locked) {
+        const lockSpan = document.createElement("span");
+        lockSpan.className = "lock-pill";
+        lockSpan.textContent = "LOCKED";
+        line2.appendChild(lockSpan);
+      }
+
+      main.appendChild(line2);
+
+      left.appendChild(checkbox);
+      left.appendChild(main);
+
+      const right = document.createElement("div");
+      right.className = "entry-right";
+      right.innerHTML = `${e.hours || 0} h<br>${e.km || 0} km`;
+
+      div.appendChild(left);
+      div.appendChild(right);
+      entryListEl.appendChild(div);
+    }
+  }
+
+  // Render overview with totals
+  function renderOverview() {
+    let totalHours = 0;
+    let totalKm = 0;
+    overviewBodyEl.innerHTML = "";
+
+    const sorted = [...entries].sort((a, b) => a.createdAt - b.createdAt);
+
+    for (const e of sorted) {
+      let h = parseFloat((e.hours || "0").toString().replace(",", "."));
+      const k = parseFloat(e.km || 0);
+      if (!isNaN(h)) totalHours += h;
+      if (!isNaN(k)) totalKm += k;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${formatDateShort(e.date)}</td>
+        <td>${e.client || ""}</td>
+        <td>${e.job || ""}</td>
+        <td>${(e.timeFrom || "?") + " - " + (e.timeTo || "?")}</td>
+        <td>${e.hours || ""}</td>
+        <td>${e.km || ""}</td>
+      `;
+      overviewBodyEl.appendChild(tr);
+    }
+
+    totalHoursEl.textContent = totalHours.toFixed(2).replace(/\.00$/, "") + " h";
+    totalKmEl.textContent = totalKm.toFixed(0) + " km";
+
+    renderMonthlySummary();
+  }
+
+  // Per maand per opdrachtgever
+  function renderMonthlySummary() {
+    monthlyBodyEl.innerHTML = "";
+    if (!entries.length) return;
+
+    const summaryMap = new Map(); // key: month|client
+
+    for (const e of entries) {
+      if (!e.date || !e.client) continue;
+      const parts = e.date.split("-");
+      if (parts.length !== 3) continue;
+      const y = parts[0];
+      const m = parts[1].padStart(2, "0");
+      const monthKey = y + "-" + m;
+      const client = e.client.trim();
+      const key = monthKey + "||" + client;
+
+      let hoursVal = parseFloat((e.hours || "0").toString().replace(",", "."));
+      if (isNaN(hoursVal)) hoursVal = 0;
+      let kmVal = parseFloat(e.km || 0);
+      if (isNaN(kmVal)) kmVal = 0;
+
+      if (!summaryMap.has(key)) {
+        summaryMap.set(key, { monthKey, client, hours: 0, km: 0 });
+      }
+      const item = summaryMap.get(key);
+      item.hours += hoursVal;
+      item.km += kmVal;
+    }
+
+    const rows = Array.from(summaryMap.values());
+    // Sorteer op maand (nieuwste eerst), dan opdrachtgever
+    rows.sort((a, b) => {
+      if (a.monthKey < b.monthKey) return 1;
+      if (a.monthKey > b.monthKey) return -1;
+      return a.client.localeCompare(b.client);
+    });
+
+    for (const r of rows) {
+      const [year, month] = r.monthKey.split("-");
+      const label = month + "-" + year;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${label}</td>
+        <td>${r.client}</td>
+        <td>${r.hours.toFixed(2).replace(/\.00$/, "")}</td>
+        <td>${r.km.toFixed(0)}</td>
+      `;
+      monthlyBodyEl.appendChild(tr);
+    }
+  }
+
+  // Build WhatsApp text for one entry
+  function formatEntryForWhatsApp(e) {
+    const dateLine = formatDateShort(e.date);
+    const timeLine = `${e.timeFrom || "?"} - ${e.timeTo || "?"}`;
+    const hoursStr = e.hours !== "" && e.hours != null ? e.hours : "0";
+    const kmStr = e.km !== "" && e.km != null ? e.km : "0";
+
+    const line3 = `${hoursStr} h.   ${kmStr} km`;
+    const line4 = `${e.client || ""}, ${e.job || ""}`;
+    return `${dateLine}\n${timeLine}\n${line3}\n${line4}`;
+  }
+
+  // Tab switching
+  function setActiveScreen(screen) {
+    if (screen === "input") {
+      screenInput.classList.add("active");
+      screenOverview.classList.remove("active");
+      tabInput.classList.add("active");
+      tabOverview.classList.remove("active");
+    } else {
+      screenInput.classList.remove("active");
+      screenOverview.classList.add("active");
+      tabInput.classList.remove("active");
+      tabOverview.classList.add("active");
+      renderOverview();
+    }
+  }
+
+  tabInput.addEventListener("click", () => setActiveScreen("input"));
+  tabOverview.addEventListener("click", () => setActiveScreen("overview"));
+
+  // Save entry
+  saveEntryBtn.addEventListener("click", () => {
+    const date = dateInput.value;
+    const timeFrom = timeFromInput.value;
+    const timeTo = timeToInput.value;
+    let hours = hoursInput.value.trim();
+    const km = kmInput.value.trim();
+    const client = clientInput.value.trim();
+    const job = jobInput.value.trim();
+
+    if (autoHoursCheckbox.checked) {
+      computeHoursFromTimes();
+      hours = hoursInput.value.trim();
+    }
+
+    if (!date || !timeFrom || !timeTo || !hours || !km || !client || !job) {
+      showToast("Vul minimaal datum, tijden, uren, km, opdrachtgever & job in.");
+      return;
+    }
+
+    const entry = {
+      id: Date.now() + "_" + Math.random().toString(16).slice(2),
+      createdAt: Date.now(),
+      date,
+      timeFrom,
+      timeTo,
+      hours,
+      km,
+      client,
+      job,
+      locked: false
+    };
+
+    entries.push(entry);
+    saveEntries();
+    addClientName(client);
+    renderEntryList();
+    renderOverview();
+    showToast("Registratie opgeslagen ✅");
+  });
+
+  // Auto-uren bij aanpassen tijden
+  timeFromInput.addEventListener("change", () => {
+    if (autoHoursCheckbox.checked) {
+      computeHoursFromTimes();
+    }
+  });
+
+  timeToInput.addEventListener("change", () => {
+    if (autoHoursCheckbox.checked) {
+      computeHoursFromTimes();
+    }
+  });
+
+  // Copy last entry to WhatsApp
+  copyLastBtn.addEventListener("click", async () => {
+    if (!entries.length) {
+      showToast("Nog geen registraties om te kopiëren.");
+      return;
+    }
+    const latest = [...entries].sort((a, b) => b.createdAt - a.createdAt)[0];
+    const text = formatEntryForWhatsApp(latest);
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        showToast("Tekst gekopieerd. Plak in WhatsApp 📲");
+      } else {
+        const tmp = document.createElement("textarea");
+        tmp.value = text;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        document.body.removeChild(tmp);
+        showToast("Tekst gekopieerd. Plak in WhatsApp 📲");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Kopiëren mislukt, probeer opnieuw.");
+      return;
+    }
+
+    const waUrl = "https://wa.me/?text=" + encodeURIComponent(text);
+    window.open(waUrl, "_blank");
+  });
+
+  // Acties op geselecteerde entries (verwijderen / locken)
+  applyEntryActionBtn.addEventListener("click", () => {
+    const action = entryActionSelect.value;
+    if (!action) {
+      showToast("Kies eerst een actie.");
+      return;
+    }
+
+    const checked = Array.from(document.querySelectorAll(".entry-check:checked"));
+    if (!checked.length) {
+      showToast("Geen registraties aangevinkt.");
+      return;
+    }
+
+    const idsSelected = checked.map(cb => cb.dataset.id);
+
+    if (action === "delete") {
+      const confirmDelete = window.confirm(
+        "Weet je zeker dat je de geselecteerde registraties wilt verwijderen?"
+      );
+      if (!confirmDelete) return;
+
+      entries = entries.filter(e => !idsSelected.includes(e.id));
+      saveEntries();
+      renderEntryList();
+      renderOverview();
+      showToast("Registraties verwijderd.");
+      entryActionSelect.value = "";
+    } else if (action === "lock") {
+      entries.forEach(e => {
+        if (idsSelected.includes(e.id)) {
+          e.locked = true;
+        }
+      });
+      saveEntries();
+      renderEntryList();
+      renderOverview();
+      showToast("Registraties gelockt.");
+      entryActionSelect.value = "";
+    }
+  });
+
+  // WACHTWOORD / LOCK LOGICA
+  function initLock() {
+    const storedPass = localStorage.getItem(PASS_KEY);
+
+    if (!storedPass) {
+      // Nog geen wachtwoord -> laat gebruiker er één instellen
+      lockMessageEl.textContent = "Stel een wachtwoord in voor deze registratie.";
+    } else {
+      lockMessageEl.textContent = "Voer je wachtwoord in om verder te gaan.";
+    }
+
+    lockScreenEl.style.display = "flex";
+
+    function handleSubmit() {
+      const value = lockPasswordEl.value;
+      if (!value) {
+        showToast("Wachtwoord mag niet leeg zijn.");
+        return;
+      }
+
+      const currentStored = localStorage.getItem(PASS_KEY);
+      if (!currentStored) {
+        // Eerste keer: opslaan
+        localStorage.setItem(PASS_KEY, value);
+        lockPasswordEl.value = "";
+        lockScreenEl.style.display = "none";
+        showToast("Wachtwoord ingesteld 🔒");
+      } else {
+        // Check
+        if (value === currentStored) {
+          lockPasswordEl.value = "";
+          lockScreenEl.style.display = "none";
+          showToast("Ingelogd ✅");
+        } else {
+          lockPasswordEl.value = "";
+          showToast("Wachtwoord onjuist.");
+        }
+      }
+    }
+
+    lockSubmitBtn.addEventListener("click", handleSubmit);
+    lockPasswordEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleSubmit();
+      }
+    });
+  }
+
+  // Init
+  loadEntries();
+  loadClients();
+  renderClientList();
+  renderEntryList();
+  renderOverview();
+  initLock();
+</script>
+</body>
+</html>
