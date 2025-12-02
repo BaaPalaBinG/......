@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maritieme Open World Click Game - v1.9.2 Haven tighten &amp; shoreline fix</title>
+<style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #0b1420;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f5f5f5;
+    }
+
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 8px 12px;
+      background: rgba(10, 10, 20, 0.8);
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 10;
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(6px);
+      max-width: 360px;
+    }
+
+    #ui h1 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+    }
+
+    #ui p {
+      margin: 2px 0;
+    }
+
+    #version {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    /* Startscherm: kies je schip */
+
+    #shipSelect {
+      max-width: 720px;
+      width: 90%;
+      padding: 18px 20px 16px;
+      background: rgba(8, 10, 18, 0.96);
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 26px 60px rgba(0,0,0,0.7);
+    }
+
+    #shipSelect h2 {
+      margin: 0 0 4px 0;
+      font-size: 18px;
+    }
+
+    #shipSelect p.subtitle {
+      margin: 2px 0 10px 0;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .ship-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .ship-card {
+      position: relative;
+      padding: 10px 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: radial-gradient(circle at top, rgba(255,255,255,0.05), rgba(10,12,20,0.96));
+      cursor: pointer;
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s;
+      font-size: 13px;
+    }
+
+    .ship-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.65);
+      border-color: rgba(168, 214, 255, 0.9);
+    }
+
+    .ship-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .ship-tagline {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .ship-stats {
+      font-size: 11px;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    .ship-label {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      opacity: 0.8;
+    }
+
+    #tradePanel {
+      margin-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 6px;
+      font-size: 12px;
+    }
+
+    .trade-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 0;
+    }
+
+    .trade-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trade-icon {
+      width: 20px;
+      text-align: center;
+    }
+
+    .trade-name {
+      font-weight: 500;
+    }
+
+    .trade-info {
+      font-size: 10px;
+      opacity: 0.8;
+    }
+
+    .trade-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .trade-btn {
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .trade-btn.buy {
+      border-color: rgba(100, 220, 140, 0.9);
+    }
+
+    .trade-btn.sell {
+      border-color: rgba(230, 120, 120, 0.9);
+    }
+
+    .trade-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .trade-qty {
+      font-size: 10px;
+      opacity: 0.85;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    #hudRight {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      pointer-events: none; /* laat muisklikken gewoon door naar de hoofdcanvas */
+    }
+
+    #windRose,
+    #miniMap {
+      background: rgba(5, 10, 18, 0.6);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    }
+
+    #windRose {
+      width: 90px;
+      height: 90px;
+    }
+
+    #miniMap {
+      width: 190px;
+      height: 190px;
+    }
+
+    #interactionMenu {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 260px;
+      padding: 16px 18px;
+      background: rgba(10, 10, 20, 0.94);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 20;
+    }
+
+    #interactionMenu h2 {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+    }
+
+    #interactionMenu p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    #interactionMenuClose {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    #interactionMenuClose:hover {
+      opacity: 1;
+    }
+  
+      #windRose { display: none; }
+
+/* Compact HUD CSS */
+#miniMapWrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 120px;
+  height: 120px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 10px;
+  padding: 4px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* minimap canvas vult de wrapper */
+#miniMapWrapper canvas#miniMap {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.miniHudBadge {
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+#cargoBar {
+  position: absolute;
+  top: 138px; /* direct onder minimap (120px + padding/margin) */
+  right: 10px;
+}
+
+
+/* UITGEKLAPT – badges in de hoeken van de map */
+#miniMapWrapper:not(.collapsed) #miniMapMoney {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+#miniMapWrapper:not(.collapsed) #miniMapWind {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+}
+
+#miniMapWrapper:not(.collapsed) #miniMapCargo {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+}
+
+#miniMapWrapper:not(.collapsed) #miniMapToggle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+/* INGEKLAPT – compacte balk met geld + cargo */
+#miniMapWrapper.collapsed {
+  width: auto;
+  height: auto;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+#miniMapWrapper.collapsed canvas#miniMap {
+  display: none;
+}
+
+/* in balk-modus staan money en cargo naast elkaar */
+#miniMapWrapper.collapsed #miniMapMoney,
+#miniMapWrapper.collapsed #miniMapCargo {
+  position: static;
+}
+
+/* in balk-modus verbergen we windpijl en toggle */
+#miniMapWrapper.collapsed #miniMapWind {
+  display: none;
+}
+
+#miniMapWrapper.collapsed #miniMapToggle {
+  position: static;
+  display: inline-block;
+  padding: 0 4px;
+}
+
+/* popup onder de map/cargo-knop */
+#cargoPopup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  width: 140px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 6px;
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  white-space: pre-line;
+}
+.hidden {
+  display: none;
+}
+
+
+@media (max-width: 700px) {
+  /* Vergrote minimap op telefoon (180x180) */
+  #miniMapWrapper {
+    width: 180px;
+    height: 180px;
+  }
+  #miniMapWrapper canvas#miniMap {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Cargo-balk netjes direct onder de grotere minimap */
+  #cargoBar {
+    top: 206px; /* 180px + marge */
+    right: 10px;
+  }
+}
+
+/* Wanneer de minimap is ingeklapt, schuift de cargobalk omhoog */
+#miniMapWrapper.collapsed + #cargoBar {
+  top: 52px;
+}
+
+
+@media (max-width: 700px) {
+  /* Vergrote minimap op telefoon */
+  #miniMapWrapper {
+    width: 160px;
+    height: 160px;
+  }
+  #miniMapWrapper canvas#miniMap {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Cargo-balk netjes direct onder de grotere minimap */
+  #cargoBar {
+    top: 186px; /* 160px + marge */
+    right: 10px;
+  }
+}
+
+</style>
+</head>
+<body>
+<div id="miniMapWrapper">
+<canvas height="120" id="miniMap" width="120"></canvas>
+<div class="miniHudBadge money" id="miniMapMoney">💰 150 ¤</div>
+<div class="miniHudBadge wind" id="miniMapWind"></div>
+<button class="miniHudBadge toggle" id="miniMapToggle">▾</button>
+</div>
+<!-- Cargo-balk los onder de minimap -->
+<div class="miniHudBadge cargo" id="cargoBar">
+<button id="cargoToggle">📦 Aan boord ▾</button>
+<div class="popup hidden" id="cargoPopup"></div>
+</div>
+<div id="interactionMenu">
+<div id="interactionMenuClose">✕</div>
+<h2>Haven interacties</h2>
+<p id="harborCargoInfo">(Opslaginformatie wordt hier getoond.)</p>
+<div id="tradePanel">
+<!-- Handel items worden via JS gevuld -->
+</div>
+<p>(Placeholder – hier komen later acties.)</p>
+</div>
+<canvas id="game"></canvas>
+<script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    // Losse windroos-canvas gebruiken we niet meer; alleen de minimap-indicator
+    const windRoseCanvas = null;
+    const windRoseCtx = null;
+
+    const miniMapCanvas = document.getElementById("miniMap");
+    const miniMapCtx = miniMapCanvas ? miniMapCanvas.getContext("2d") : null;
+
+    const miniMapWrapper = document.getElementById("miniMapWrapper");
+    const miniMapMoneyEl = document.getElementById("miniMapMoney");
+    const miniMapWindEl = document.getElementById("miniMapWind");
+    const miniMapToggleEl = document.getElementById("miniMapToggle");
+    const cargoToggleEl = document.getElementById("cargoToggle");
+    const cargoPopupEl = document.getElementById("cargoPopup");
+
+    const interactionMenu = document.getElementById("interactionMenu");
+    const interactionMenuClose = document.getElementById("interactionMenuClose");
+    const shipStatusEl = null;
+    const cargoStatusEl = null;
+    const cargoManifestEl = null;
+    const moneyStatusEl = miniMapMoneyEl;
+    const harborCargoInfo = document.getElementById("harborCargoInfo");
+    const tradePanelEl = document.getElementById("tradePanel");
+
+    
+
+    // HUD interactiviteit: minimap inklappen en cargovenster
+    if (miniMapWrapper && miniMapToggleEl) {
+      miniMapToggleEl.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const collapsed = miniMapWrapper.classList.toggle("collapsed");
+        miniMapToggleEl.textContent = collapsed ? "▣" : "▾";
+      });
+    }
+
+    if (cargoToggleEl && cargoPopupEl) {
+      cargoToggleEl.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const isHidden = cargoPopupEl.classList.contains("hidden");
+        if (isHidden) {
+          buildCargoPopup();
+          cargoPopupEl.classList.remove("hidden");
+        } else {
+          cargoPopupEl.classList.add("hidden");
+        }
+      });
+
+      // Klik buiten de minimap sluit de cargo-popup
+      document.addEventListener("click", () => {
+        cargoPopupEl.classList.add("hidden");
+      });
+
+      // voorkomen dat klik in popup zelf hem direct sluit
+      cargoPopupEl.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+      });
+    }
+
+    function buildCargoPopup() {
+      if (!cargoPopupEl) return;
+      const lines = [];
+      if (player.cargo) {
+        for (const p of products) {
+          const qty = player.cargo[p.id] || 0;
+          if (qty > 0) {
+            lines.push(`${qty}x ${p.name}`);
+          }
+        }
+      }
+      if (!lines.length) {
+        cargoPopupEl.textContent = "Aan boord: (leeg)";
+      } else {
+        cargoPopupEl.textContent = lines.join("\n");
+      }
+    }
+
+const shipTypes = {
+      sloep: {
+        id: "sloep",
+        name: "Kustsloep",
+        speed: 230,
+        radius: 15,
+        cargoCapacity: 30,
+        maxSpace: 30,
+        maxWeight: 60
+      },
+      kogge: {
+        id: "kogge",
+        name: "Handelskogge",
+        speed: 200,
+        radius: 18,
+        cargoCapacity: 60,
+        maxSpace: 60,
+        maxWeight: 140
+      },
+      fregat: {
+        id: "fregat",
+        name: "Licht fregat",
+        speed: 260,
+        radius: 20,
+        cargoCapacity: 90,
+        maxSpace: 90,
+        maxWeight: 240
+      }
+    };
+
+    let selectedShipId = "kogge";
+    let shipChosen = true;
+    let currentMarketIsland = null;
+
+
+
+
+    const products = [
+      {
+        id: "fish",
+        name: "Vis",
+        icon: "🐟",
+        weight: 2,
+        space: 1,
+        buyPrice: 12,
+        sellPrice: 9
+      },
+      {
+        id: "grain",
+        name: "Graan",
+        icon: "🌾",
+        weight: 1,
+        space: 1,
+        buyPrice: 8,
+        sellPrice: 6
+      },
+      {
+        id: "wood",
+        name: "Hout",
+        icon: "🪵",
+        weight: 3,
+        space: 2,
+        buyPrice: 10,
+        sellPrice: 7
+      },
+      {
+        id: "spice",
+        name: "Specerijen",
+        icon: "🧂",
+        weight: 1,
+        space: 1,
+        buyPrice: 20,
+        sellPrice: 15
+      },
+      {
+        id: "fabric",
+        name: "Textiel",
+        icon: "🧵",
+        weight: 1,
+        space: 2,
+        buyPrice: 18,
+        sellPrice: 13
+      },
+      {
+        id: "ore",
+        name: "Erts",
+        icon: "⛏️",
+        weight: 4,
+        space: 2,
+        buyPrice: 16,
+        sellPrice: 11
+      },
+      {
+        id: "wine",
+        name: "Wijn",
+        icon: "🍷",
+        weight: 2,
+        space: 2,
+        buyPrice: 22,
+        sellPrice: 17
+      }
+    ];
+
+
+    // Modulair marktsysteem: profielen zijn uitbreidbaar via addMarketProfile(...)
+    const marketProfiles = {};
+
+    function addMarketProfile(profile) {
+      if (!profile || !profile.id) return;
+      marketProfiles[profile.id] = {
+        id: profile.id,
+        name: profile.name || profile.id,
+        modifiers: profile.modifiers || {}
+      };
+    }
+
+    // Basisprofielen (later makkelijk uitbreidbaar)
+    addMarketProfile({
+      id: "fish_village",
+      name: "Visdorp",
+      modifiers: {
+        fish: 0.7,
+        grain: 1.2,
+        wood: 1.0,
+        spice: 1.3,
+        fabric: 1.1,
+        ore: 1.2,
+        wine: 1.3
+      }
+    });
+
+    addMarketProfile({
+      id: "grain_hub",
+      name: "Graanregio",
+      modifiers: {
+        grain: 0.7,
+        fish: 1.1,
+        wood: 1.0,
+        spice: 1.3,
+        fabric: 1.2,
+        ore: 1.1,
+        wine: 1.2
+      }
+    });
+
+    addMarketProfile({
+      id: "mining_town",
+      name: "Mijnstad",
+      modifiers: {
+        ore: 0.6,
+        wood: 0.9,
+        fish: 1.2,
+        grain: 1.1,
+        spice: 1.3,
+        fabric: 1.2,
+        wine: 1.3
+      }
+    });
+
+    addMarketProfile({
+      id: "lux_port",
+      name: "Luxe haven",
+      modifiers: {
+        wine: 0.7,
+        spice: 0.75,
+        fabric: 0.9,
+        fish: 1.2,
+        grain: 1.3,
+        wood: 1.2,
+        ore: 1.3
+      }
+    });
+
+    function getEffectivePrices(product, island) {
+      if (!product) {
+        return { buy: 0, sell: 0 };
+      }
+      const baseBuy = product.buyPrice;
+      const baseSell = product.sellPrice;
+
+      if (!island || !island.marketProfileId) {
+        return { buy: baseBuy, sell: baseSell };
+      }
+
+      const profile = marketProfiles[island.marketProfileId];
+      if (!profile || !profile.modifiers) {
+        return { buy: baseBuy, sell: baseSell };
+      }
+
+      const mod = Object.prototype.hasOwnProperty.call(profile.modifiers, product.id)
+        ? profile.modifiers[product.id]
+        : 1;
+
+      const buy = Math.max(1, Math.round(baseBuy * mod));
+      const sell = Math.max(0, Math.round(baseSell * mod));
+      return { buy, sell };
+    }
+
+
+    
+
+    const SAVE_KEY = "maritime-openworld-save-v1";
+
+    function saveGame() {
+      try {
+        if (typeof localStorage === "undefined") return;
+        const data = {
+          money: player.money || 0,
+          cargo: player.cargo || {},
+          selectedShipId,
+          shipChosen
+        };
+        localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+      } catch (e) {
+        // negeer opslagfouten (bijv. private mode)
+      }
+    }
+
+    function loadGame() {
+      try {
+        if (typeof localStorage === "undefined") return;
+        const raw = localStorage.getItem(SAVE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (typeof data.money === "number") {
+          player.money = data.money;
+        }
+        if (data.cargo && typeof data.cargo === "object") {
+          player.cargo = { ...data.cargo };
+        }
+        if (data.selectedShipId && shipTypes[data.selectedShipId]) {
+          selectedShipId = data.selectedShipId;
+          shipChosen = !!data.shipChosen;
+        }
+      } catch (e) {
+        // als er iets misgaat met laden, gewoon doorgaan met defaults
+      }
+    }
+
+function getCargoTotals() {
+      let usedWeight = 0;
+      let usedSpace = 0;
+      if (!player.cargo) return { usedWeight, usedSpace };
+      for (const p of products) {
+        const qty = player.cargo[p.id] || 0;
+        usedWeight += qty * p.weight;
+        usedSpace += qty * p.space;
+      }
+      return { usedWeight, usedSpace };
+    }
+
+    function updateMoneyUI() {
+      if (!moneyStatusEl) return;
+      const money = player.money || 0;
+      moneyStatusEl.textContent = `💰 ${money.toFixed(0)} ¤`;
+    }
+
+    function buildTradePanel() {
+      if (!tradePanelEl) return;
+      tradePanelEl.innerHTML = "";
+
+      products.forEach(p => {
+        const row = document.createElement("div");
+        row.className = "trade-row";
+        row.dataset.productId = p.id;
+
+        const left = document.createElement("div");
+        left.className = "trade-left";
+
+        const iconSpan = document.createElement("div");
+        iconSpan.className = "trade-icon";
+        iconSpan.textContent = p.icon;
+
+        const nameWrap = document.createElement("div");
+        const nameSpan = document.createElement("div");
+        nameSpan.className = "trade-name";
+        nameSpan.textContent = p.name;
+        const infoSpan = document.createElement("div");
+        infoSpan.className = "trade-info";
+        infoSpan.textContent = `Gew: ${p.weight}, Ruimte: ${p.space}`;
+
+        nameWrap.appendChild(nameSpan);
+        nameWrap.appendChild(infoSpan);
+
+        left.appendChild(iconSpan);
+        left.appendChild(nameWrap);
+
+        const right = document.createElement("div");
+        right.className = "trade-right";
+
+        const priceSpan = document.createElement("div");
+        const prices = getEffectivePrices(p, currentMarketIsland);
+        priceSpan.textContent = `${prices.buy} / ${prices.sell} ¤`;
+
+        const qtySpan = document.createElement("div");
+        qtySpan.className = "trade-qty";
+        const qty = (player.cargo && player.cargo[p.id]) || 0;
+        qtySpan.textContent = `Aan boord: ${qty}`;
+
+        const buyBtn = document.createElement("button");
+        buyBtn.className = "trade-btn buy";
+        buyBtn.textContent = "Koop +1";
+        buyBtn.dataset.action = "buy";
+        buyBtn.dataset.productId = p.id;
+
+        const sellBtn = document.createElement("button");
+        sellBtn.className = "trade-btn sell";
+        sellBtn.textContent = "Verkoop -1";
+        sellBtn.dataset.action = "sell";
+        sellBtn.dataset.productId = p.id;
+
+        right.appendChild(priceSpan);
+        right.appendChild(qtySpan);
+        right.appendChild(buyBtn);
+        right.appendChild(sellBtn);
+
+        row.appendChild(left);
+        row.appendChild(right);
+
+        tradePanelEl.appendChild(row);
+      });
+
+      if (!tradePanelEl.dataset.bound) {
+        tradePanelEl.addEventListener("click", (e) => {
+          const btn = e.target.closest(".trade-btn");
+          if (!btn) return;
+          const action = btn.dataset.action;
+          const pid = btn.dataset.productId;
+          const product = products.find(x => x.id === pid);
+          if (!product) return;
+          if (!shipChosen || !selectedShipId) return;
+
+          const money = player.money || 0;
+          const { usedWeight, usedSpace } = getCargoTotals();
+          const shipCfg = shipTypes[selectedShipId];
+          const maxW = player.maxWeight || shipCfg.maxWeight || 0;
+          const maxS = player.maxSpace || shipCfg.maxSpace || shipCfg.cargoCapacity || 0;
+
+          const prices = getEffectivePrices(product, currentMarketIsland);
+
+          if (action === "buy") {
+            const price = prices.buy;
+            if (money < price) return;
+            const extraW = product.weight;
+            const extraS = product.space;
+            if (usedWeight + extraW > maxW) return;
+            if (usedSpace + extraS > maxS) return;
+
+            player.money = money - price;
+            if (!player.cargo) player.cargo = {};
+            player.cargo[pid] = (player.cargo[pid] || 0) + 1;
+          } else if (action === "sell") {
+            if (!player.cargo || !player.cargo[pid] || player.cargo[pid] <= 0) return;
+            const price = prices.sell;
+            player.cargo[pid] = player.cargo[pid] - 1;
+            player.money = money + price;
+          }
+
+          updateShipUI();
+          updateMoneyUI();
+          saveGame();
+
+          // update quantity label in the clicked row
+          const row = btn.closest(".trade-row");
+          if (row) {
+            const qtySpan = row.querySelector(".trade-qty");
+            if (qtySpan) {
+              const newQty = (player.cargo && player.cargo[pid]) || 0;
+              qtySpan.textContent = `Aan boord: ${newQty}`;
+            }
+          }
+
+          if (harborCargoInfo && shipChosen && selectedShipId) {
+            const cfg = shipTypes[selectedShipId];
+            const totals = getCargoTotals();
+            const maxW2 = player.maxWeight || cfg.maxWeight || 0;
+            const maxS2 = player.maxSpace || cfg.maxSpace || cfg.cargoCapacity || 0;
+            let extraInfo = "";
+            if (currentMarketIsland && currentMarketIsland.marketName) {
+              extraInfo = ` — Markt: ${currentMarketIsland.marketName}`;
+            }
+            harborCargoInfo.textContent =
+              `Opslag in haven – ${cfg.name}: gewicht ${totals.usedWeight} / ${maxW2}, ruimte ${totals.usedSpace} / ${maxS2}` + extraInfo;
+          }
+        });
+
+        tradePanelEl.dataset.bound = "1";
+      }
+    }
+
+function updateShipUI() {
+      if (!shipStatusEl || !cargoStatusEl) return;
+      if (!shipChosen || !selectedShipId) {
+        shipStatusEl.textContent = "Geen schip gekozen";
+        cargoStatusEl.textContent = "";
+        if (cargoManifestEl) cargoManifestEl.textContent = "";
+        if (moneyStatusEl) moneyStatusEl.textContent = "";
+        return;
+      }
+      const cfg = shipTypes[selectedShipId];
+      if (!cfg) return;
+
+      const totals = getCargoTotals();
+      const maxW = player.maxWeight || cfg.maxWeight || 0;
+      const maxS = player.maxSpace || cfg.maxSpace || cfg.cargoCapacity || 0;
+
+      shipStatusEl.textContent = `Schip: ${cfg.name}`;
+      cargoStatusEl.textContent =
+        `Lading: gewicht ${totals.usedWeight} / ${maxW}, ruimte ${totals.usedSpace} / ${maxS}`;
+
+      if (cargoManifestEl) {
+        const lines = [];
+        if (player.cargo) {
+          for (const p of products) {
+            const qty = player.cargo[p.id] || 0;
+            if (qty > 0) {
+              lines.push(`${qty}x ${p.name}`);
+            }
+          }
+        }
+        cargoManifestEl.textContent =
+          lines.length ? `Aan boord: ${lines.join(", ")}` : "Aan boord: (leeg)";
+      }
+
+      updateMoneyUI();
+    }
+
+    function applyShipConfig(id) {
+      const cfg = shipTypes[id];
+      if (!cfg) return;
+      player.radius = cfg.radius;
+      player.speed = cfg.speed;
+      player.cargoCapacity = cfg.cargoCapacity;
+      player.maxWeight = cfg.maxWeight;
+      player.maxSpace = cfg.maxSpace;
+      if (!player.cargo) player.cargo = {};
+      if (player.money == null) player.money = 150;
+      selectedShipId = id;
+      shipChosen = true;
+      updateShipUI();
+      updateMoneyUI();
+    }
+
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // Pas ook de minimap-resolutie aan op basis van schermbreedte
+      if (miniMapCanvas) {
+        if (window.innerWidth <= 700) {
+          miniMapCanvas.width = 180;
+          miniMapCanvas.height = 180;
+        } else {
+          miniMapCanvas.width = 120;
+          miniMapCanvas.height = 120;
+        }
+      }
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const world = {
+      width: 5000,
+      height: 5000,
+      seaColor: "#0c2238"
+    };
+
+    // Globale wind: hoek in radians, strength 0..1
+    const wind = {
+      angle: Math.random() * Math.PI * 2,
+      strength: 0.7,
+      phase: 0
+    };
+
+
+    function randRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+
+    function treeRand(hill, i, salt) {
+      const x = Math.sin(hill.x * 12.9898 + hill.y * 78.233 + i * 37.719 + salt * 11.17) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function angleDiff(a, b) {
+      let d = a - b;
+      while (d > Math.PI) d -= Math.PI * 2;
+      while (d < -Math.PI) d += Math.PI * 2;
+      return d;
+    }
+
+    function showInteractionMenu() {
+      if (harborCargoInfo) {
+        if (shipChosen && selectedShipId) {
+          const cfg = shipTypes[selectedShipId];
+          const totals = getCargoTotals();
+          const maxW = player.maxWeight || cfg.maxWeight || 0;
+          const maxS = player.maxSpace || cfg.maxSpace || cfg.cargoCapacity || 0;
+          let extraInfo = "";
+          if (currentMarketIsland && currentMarketIsland.marketName) {
+            extraInfo = ` — Markt: ${currentMarketIsland.marketName}`;
+          }
+          harborCargoInfo.textContent =
+            `Opslag in haven – ${cfg.name}: gewicht ${totals.usedWeight} / ${maxW}, ruimte ${totals.usedSpace} / ${maxS}` + extraInfo;
+        } else {
+          harborCargoInfo.textContent = "Opslag in haven – geen schip geselecteerd.";
+        }
+      }
+      buildTradePanel();
+      interactionMenu.style.display = "block";
+    }
+
+    function hideInteractionMenu() {
+      interactionMenu.style.display = "none";
+    }
+
+    interactionMenuClose.addEventListener("click", () => {
+      hideInteractionMenu();
+    });
+
+    // Random organische eilanden met detail + haven
+    function generateIslands() {
+      const islands = [];
+      const islandCount = Math.floor(randRange(8, 14));
+      const minRadius = 190;
+      const maxRadius = 380;
+      const edgePadding = 600;
+      const minDistanceExtra = 280;
+
+      let attemptsLimit = islandCount * 90;
+      let attempts = 0;
+
+      while (islands.length < islandCount && attempts < attemptsLimit) {
+        attempts++;
+
+        const baseR = randRange(minRadius, maxRadius);
+        const x = randRange(edgePadding + baseR, world.width - edgePadding - baseR);
+        const y = randRange(edgePadding + baseR, world.height - edgePadding - baseR);
+
+        let overlaps = false;
+        for (let i = 0; i < islands.length; i++) {
+          const other = islands[i];
+          const dx = other.x - x;
+          const dy = other.y - y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < other.baseR + baseR + minDistanceExtra) {
+            overlaps = true;
+            break;
+          }
+        }
+        if (overlaps) continue;
+
+        // Gladde basisvorm met sinusgolven
+        const points = [];
+        const segments = 72;
+        const roughness = randRange(0.05, 0.11);
+        const fineFactor = roughness * 0.4;
+        const waves = randRange(1.5, 3.2);
+        const phase = randRange(0, Math.PI * 2);
+
+        for (let i = 0; i < segments; i++) {
+          const angle = (Math.PI * 2 * i) / segments;
+          const bigWave = Math.sin(angle * waves + phase) * roughness * baseR;
+          const smallWave = randRange(-fineFactor * baseR, fineFactor * baseR);
+          const r = baseR + bigWave + smallWave;
+          const px = Math.cos(angle) * r;
+          const py = Math.sin(angle) * r;
+          points.push({ x: px, y: py, r });
+        }
+
+        // Botsingsradius iets groter dan vorm
+        const collisionR = baseR * (1.05 + roughness);
+
+        // Rotsclusters
+        let rocks = [];
+        const clusterCount = Math.floor(randRange(2, 4));
+        for (let c = 0; c < clusterCount; c++) {
+          const clusterAngle = randRange(0, Math.PI * 2);
+          const clusterRadius = baseR * randRange(1.05, 1.25);
+          const clusterLocalX = Math.cos(clusterAngle) * clusterRadius;
+          const clusterLocalY = Math.sin(clusterAngle) * clusterRadius;
+
+          const tangentAngle = clusterAngle + Math.PI / 2;
+          const rocksInCluster = Math.floor(randRange(3, 7));
+
+          for (let i = 0; i < rocksInCluster; i++) {
+            const offsetAlong = randRange(-baseR * 0.45, baseR * 0.45);
+            const offsetRadial = randRange(-baseR * 0.12, baseR * 0.2);
+
+            const localX =
+              clusterLocalX +
+              Math.cos(tangentAngle) * offsetAlong +
+              Math.cos(clusterAngle) * offsetRadial;
+            const localY =
+              clusterLocalY +
+              Math.sin(tangentAngle) * offsetAlong +
+              Math.sin(clusterAngle) * offsetRadial;
+
+            const size = randRange(baseR * 0.04, baseR * 0.09);
+            const angle = randRange(-0.6, 0.6);
+            const tone = randRange(0, 1);
+
+            const shapeTypeRand = Math.random();
+            let shapeType;
+            if (shapeTypeRand < 0.4) {
+              shapeType = "ellipse";
+            } else if (shapeTypeRand < 0.75) {
+              shapeType = "chunk";
+            } else {
+              shapeType = "multi";
+            }
+
+            let poly = null;
+            if (shapeType === "chunk") {
+              poly = [];
+              const polySegments = Math.floor(randRange(5, 8));
+              for (let j = 0; j < polySegments; j++) {
+                const a = (Math.PI * 2 * j) / polySegments + randRange(-0.25, 0.25);
+                const rr = size * randRange(0.7, 1.4);
+                poly.push({
+                  x: Math.cos(a) * rr,
+                  y: Math.sin(a) * rr
+                });
+              }
+            }
+
+            let sub = null;
+            if (shapeType === "multi") {
+              sub = [];
+              const count = Math.floor(randRange(2, 4));
+              for (let j = 0; j < count; j++) {
+                const a = randRange(0, Math.PI * 2);
+                const d = size * randRange(0.0, 0.8);
+                sub.push({
+                  dx: Math.cos(a) * d,
+                  dy: Math.sin(a) * d,
+                  scale: randRange(0.6, 1.0),
+                  angle: randRange(-0.6, 0.6)
+                });
+              }
+            }
+
+            const collisionR_rock = size * 1.1;
+
+            const worldX = x + localX;
+            const worldY = y + localY;
+
+            rocks.push({
+              localX,
+              localY,
+              worldX,
+              worldY,
+              size,
+              angle,
+              tone,
+              shapeType,
+              poly,
+              sub,
+              collisionR: collisionR_rock
+            });
+          }
+        }
+
+        
+        // Bomen (Tree 3.0) + struiken
+
+        function buildTreeData(treeBaseR, tint) {
+          const clusters = [];
+
+          // Kernclusters (donkerder, dichter bij centrum)
+          const coreCount = 5 + Math.floor(Math.random() * 3); // 5–7
+          for (let i = 0; i < coreCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = treeBaseR * (0.05 + Math.random() * 0.18);
+            const r = treeBaseR * (0.22 + Math.random() * 0.12);
+            const dx = Math.cos(angle) * dist;
+            const dy = Math.sin(angle) * dist;
+
+            clusters.push({
+              dx,
+              dy,
+              r,
+              lobes: 3 + Math.floor(Math.random() * 3),      // 3–5 lobben
+              rot: Math.random() * Math.PI * 2,
+              isCore: true,
+              colorIndex: Math.floor(Math.random() * 3),
+              highlightCount: 2 + Math.floor(Math.random() * 3)
+            });
+          }
+
+          // Buitenste bladkrans
+          const ringCount = 14 + Math.floor(Math.random() * 10); // 14–23
+          for (let i = 0; i < ringCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = treeBaseR * (0.28 + Math.random() * 0.45);
+            const r = treeBaseR * (0.16 + Math.random() * 0.12);
+            const dx = Math.cos(angle) * dist;
+            const dy = Math.sin(angle) * dist;
+
+            clusters.push({
+              dx,
+              dy,
+              r,
+              lobes: 3 + Math.floor(Math.random() * 3),
+              rot: Math.random() * Math.PI * 2,
+              isCore: false,
+              colorIndex: Math.floor(Math.random() * 3),
+              highlightCount: 2 + Math.floor(Math.random() * 3)
+            });
+          }
+
+          let trunk = null;
+          if (Math.random() < 0.08) {
+            const angle = Math.random() * Math.PI * 2;
+            trunk = {
+              angle,
+              length: treeBaseR * (0.38 + Math.random() * 0.18),
+              width: treeBaseR * (0.04 + Math.random() * 0.03)
+            };
+          }
+
+          return { clusters, trunk };
+        }
+
+        // Grote bomen (voorheen heuvels)
+        let hills = [];
+        const hillCount = Math.floor(randRange(3, 7));
+        for (let i = 0; i < hillCount; i++) {
+          const angle = randRange(0, Math.PI * 2);
+          const r = baseR * randRange(0.1, 0.6);
+          const size = randRange(baseR * 0.15, baseR * 0.28);
+          const hx = Math.cos(angle) * r;
+          const hy = Math.sin(angle) * r;
+          const tint = randRange(0, 1);
+          const tree = buildTreeData(size, tint);
+          hills.push({ x: hx, y: hy, size, tint, tree });
+        }
+
+        // Struiken - netjes verdelen, geen stapels, niet bovenop rotsen of bomen
+        let bushes = [];
+        const bushCount = Math.floor(randRange(16, 32));
+        const maxBushAttempts = bushCount * 8;
+
+        let bushAttempts = 0;
+        while (bushes.length < bushCount && bushAttempts < maxBushAttempts) {
+          bushAttempts++;
+
+          const angle = randRange(0, Math.PI * 2);
+          const r = baseR * randRange(0.2, 0.9);
+          const size = Math.floor(randRange(baseR * 0.03, baseR * 0.06));
+          const bx = Math.cos(angle) * r;
+          const by = Math.sin(angle) * r;
+          const tint = randRange(0, 1);
+
+          let okBush = true;
+          const minBushDist = size * 2.4;
+          for (const b of bushes) {
+            const dx = bx - b.x;
+            const dy = by - b.y;
+            const d2 = dx * dx + dy * dy;
+            const minD = minBushDist + b.size;
+            if (d2 < minD * minD) {
+              okBush = false;
+              break;
+            }
+          }
+
+          // niet te dicht bij rotsen
+          if (okBush && rocks && rocks.length) {
+            const minRockDist = baseR * 0.045;
+            for (const rock of rocks) {
+              const dx = (x + bx) - rock.worldX;
+              const dy = (y + by) - rock.worldY;
+              const minD = minRockDist + rock.collisionR;
+              if (dx * dx + dy * dy < minD * minD) {
+                okBush = false;
+                break;
+              }
+            }
+          }
+
+          // niet bovenop grote bomen
+          if (okBush && hills && hills.length) {
+            for (const hill of hills) {
+              const dxh = bx - hill.x;
+              const dyh = by - hill.y;
+              const d2h = dxh * dxh + dyh * dyh;
+              const minDh = (size * 0.8) + (hill.size * 0.9);
+              if (d2h < minDh * minDh) {
+                okBush = false;
+                break;
+              }
+            }
+          }
+
+          if (!okBush) continue;
+
+          const shapeRand = Math.random();
+          let model;
+          if (shapeRand < 0.4) {
+            model = "single";
+          } else if (shapeRand < 0.75) {
+            model = "double";
+          } else {
+            model = "triple";
+          }
+
+          const subCircles = [];
+          if (model === "single") {
+            subCircles.push({ dx: 0, dy: 0, scale: 1.0 });
+          } else if (model === "double") {
+            subCircles.push({ dx: 0, dy: 0, scale: 1.0 });
+            subCircles.push({ dx: -0.4, dy: -0.25, scale: 0.75 });
+          } else {
+            subCircles.push({ dx: -0.3, dy: -0.2, scale: 0.8 });
+            subCircles.push({ dx: 0.3, dy: -0.2, scale: 0.85 });
+            subCircles.push({ dx: 0.0, dy: 0.2, scale: 0.9 });
+          }
+
+          bushes.push({ x: bx, y: by, size, tint, model, subCircles });
+        }
+
+// Haven
+        let harbor = null;
+        const wantHarbor = Math.random() < 0.6 || islands.length === 0;
+        if (wantHarbor) {
+          const ang = randRange(0, Math.PI * 2);
+
+          // 1) Zoek echte kust-radius in richting ang (zodat steiger echt op het land aansluit)
+          let bestPoint = points[0];
+          let bestDiff = Math.abs(angleDiff(Math.atan2(points[0].y, points[0].x), ang));
+          for (let i = 1; i < points.length; i++) {
+            const p = points[i];
+            const pa = Math.atan2(p.y, p.x);
+            const diff = Math.abs(angleDiff(pa, ang));
+            if (diff < bestDiff) {
+              bestDiff = diff;
+              bestPoint = p;
+            }
+          }
+          const radiusAtAngle = Math.sqrt(bestPoint.x * bestPoint.x + bestPoint.y * bestPoint.y);
+          const shoreR = radiusAtAngle * 0.98; // nét in het land
+
+          const dockLen = baseR * 0.35;
+          const snapOffset = baseR * 0.18;
+
+          const localHX = Math.cos(ang) * shoreR;
+          const localHY = Math.sin(ang) * shoreR;
+          const worldHX = x + localHX;
+          const worldHY = y + localHY;
+
+          const snapDist = shoreR + dockLen + snapOffset;
+          const snapWorldX = x + Math.cos(ang) * snapDist;
+          const snapWorldY = y + Math.sin(ang) * snapDist;
+
+          const houseOffset = baseR * 0.2;
+          const houseLocalX = localHX - Math.cos(ang) * houseOffset;
+          const houseLocalY = localHY - Math.sin(ang) * houseOffset;
+
+          // Groen onder steiger/huisje ruimer vrijmaken
+          const clearDockRadius = dockLen * 1.1;
+          const clearHouseRadius = baseR * 0.32;
+          bushes = bushes.filter(bush => {
+            const dxDock = bush.x - localHX;
+            const dyDock = bush.y - localHY;
+            const distDock2 = dxDock * dxDock + dyDock * dyDock;
+
+            const dxHouse = bush.x - houseLocalX;
+            const dyHouse = bush.y - houseLocalY;
+            const distHouse2 = dxHouse * dxHouse + dyHouse * dyHouse;
+
+            if (distDock2 < clearDockRadius * clearDockRadius) return false;
+            if (distHouse2 < clearHouseRadius * clearHouseRadius) return false;
+            return true;
+          });
+
+          // Heuvels rondom steiger en huisje weghalen
+          hills = hills.filter(hill => {
+            const dxDock = hill.x - localHX;
+            const dyDock = hill.y - localHY;
+            const distDock2 = dxDock * dxDock + dyDock * dyDock;
+
+            const dxHouse = hill.x - houseLocalX;
+            const dyHouse = hill.y - houseLocalY;
+            const distHouse2 = dxHouse * dxHouse + dyHouse * dyHouse;
+
+            if (distDock2 < clearDockRadius * clearDockRadius) return false;
+            if (distHouse2 < clearHouseRadius * clearHouseRadius) return false;
+            return true;
+          });
+
+          harbor = {
+            localX: localHX,
+            localY: localHY,
+            worldX: worldHX,
+            worldY: worldHY,
+            angle: ang,
+            dockLen,
+            snapWorldX,
+            snapWorldY,
+            houseLocalX,
+            houseLocalY
+          };
+
+          // Rotsen in kleine sector vrijmaken
+          const clearHalfAngle = Math.PI / 6;
+          const innerClear = shoreR * 0.9;
+          const outerClear = shoreR + dockLen * 1.6;
+
+          rocks = rocks.filter(rock => {
+            const dx = rock.localX;
+            const dy = rock.localY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < innerClear || dist > outerClear) return true;
+            const a = Math.atan2(dy, dx);
+            const diff = Math.abs(angleDiff(a, ang));
+            if (diff < clearHalfAngle) {
+              return false;
+            }
+            return true;
+          });
+        }
+
+
+        const biomeRand = Math.random();
+        let biome;
+        if (biomeRand < 0.45) {
+          biome = "temperate";
+        } else if (biomeRand < 0.75) {
+          biome = "rocky";
+        } else {
+          biome = "tropical";
+        }
+
+        // Kies een marktprofiel voor dit eiland.
+        let marketProfileId = null;
+        let marketName = "Onbekende markt";
+        const profileKeys = Object.keys(marketProfiles || {});
+        if (profileKeys.length > 0) {
+          const randomId = profileKeys[Math.floor(Math.random() * profileKeys.length)];
+          const profile = marketProfiles[randomId];
+          if (profile) {
+            marketProfileId = profile.id;
+            marketName = profile.name || profile.id;
+          }
+        }
+
+        islands.push({
+          x,
+          y,
+          baseR,
+          points,
+          collisionR,
+          rocks,
+          bushes,
+          hills,
+          harbor,
+          biome,
+          marketProfileId,
+          marketName
+        });
+
+      }
+
+      return islands;
+    }
+
+    const islands = generateIslands();
+
+// Zoek een spawnpunt in open water (niet op een eiland of bovenop rotsen)
+function findWaterSpawn() {
+      for (let attempt = 0; attempt < 200; attempt++) {
+        const x = randRange(400, world.width - 400);
+        const y = randRange(400, world.height - 400);
+
+        let valid = true;
+
+        for (let i = 0; i < islands.length; i++) {
+          const island = islands[i];
+          const dx = x - island.x;
+          const dy = y - island.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+
+          // minimaal wat marge t.o.v. eiland
+          if (d < island.collisionR + 260) {
+            valid = false;
+            break;
+          }
+
+          // check rotsen ook nog even
+          for (let j = 0; j < island.rocks.length; j++) {
+            const rock = island.rocks[j];
+            const rdx = x - rock.worldX;
+            const rdy = y - rock.worldY;
+            const rd = Math.sqrt(rdx * rdx + rdy * rdy);
+            if (rd < rock.collisionR + 220) {
+              valid = false;
+              break;
+            }
+          }
+          if (!valid) break;
+        }
+
+        if (valid) {
+          return { x, y };
+        }
+      }
+
+      // fallback: midden van de wereld
+      return { x: world.width / 2, y: world.height / 2 };
+    }
+
+    const spawn = findWaterSpawn();
+
+    const player = {
+      x: spawn.x,
+      y: spawn.y,
+      radius: 18,
+      speed: 220,
+      targetX: null,
+      targetY: null,
+      angle: 0,
+      cargo: {},
+      cargoCapacity: 0,
+      maxWeight: 0,
+      maxSpace: 0,
+      money: 150
+    };
+
+    // Standaard één schip kiezen (Handelskogge)
+    applyShipConfig("kogge");
+    // Probeer opgeslagen progress te laden (geld + cargo + schipkeuze)
+    loadGame();
+    updateShipUI();
+    updateMoneyUI();
+
+    const camera = {
+      x: 0,
+      y: 0
+    };
+
+    // Zoomfactor voor de wereldweergave (1.0 = normaal)
+    let worldScale = 1.0;
+
+
+    function worldClickToHarbor(worldX, worldY) {
+      // Controleer of klik op een steiger is, maar alleen als de boot binnen "bootlengte" van de haven is
+      for (let i = 0; i < islands.length; i++) {
+        const island = islands[i];
+        if (!island.harbor) continue;
+        const harbor = island.harbor;
+
+        const pdx = player.x - harbor.worldX;
+        const pdy = player.y - harbor.worldY;
+        const pd = Math.sqrt(pdx * pdx + pdy * pdy);
+
+        const shipLength = player.radius * 2;       // visuele lengte
+        const interactRadius = shipLength * 3;          // ongeveer bootlengte
+        if (pd > interactRadius) continue;
+
+        // Klik naar steiger-lokaal coördinatenstelsel
+        const dx = worldX - harbor.worldX;
+        const dy = worldY - harbor.worldY;
+        const cosA = Math.cos(harbor.angle);
+        const sinA = Math.sin(harbor.angle);
+
+        const localX = dx * cosA + dy * sinA;
+        const localY = -dx * sinA + dy * cosA;
+
+        const dockWidth = island.baseR * 0.12;
+        const halfWidth = dockWidth / 2;
+        const margin = dockWidth * 0.4;
+
+        if (localX >= 0 && localX <= harbor.dockLen &&
+            Math.abs(localY) <= halfWidth + margin) {
+          currentMarketIsland = island;
+          return harbor;
+        }
+      }
+      return null;
+    }
+
+    canvas.addEventListener("click", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const screenX = e.clientX - rect.left;
+      const screenY = e.clientY - rect.top;
+
+      const worldX = camera.x + screenX / worldScale;
+      const worldY = camera.y + screenY / worldScale;
+
+      const clickedHarbor = worldClickToHarbor(worldX, worldY);
+      if (clickedHarbor) {
+        showInteractionMenu();
+        player.targetX = null;
+        player.targetY = null;
+        return;
+      }
+
+      hideInteractionMenu();
+      player.targetX = worldX;
+      player.targetY = worldY;
+    });
+
+    function drawSea() {
+      // Diepere, dynamische zee: donker aan de randen, iets lichter in het midden
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, "#020815");
+      grad.addColorStop(0.5, "#053058");
+      grad.addColorStop(1, "#010712");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Klein kompas rechtsboven dat de windrichting laat zien
+    function drawWindRose() {
+      if (!windRoseCtx) return;
+      const w = windRoseCanvas.width;
+      const h = windRoseCanvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = Math.min(w, h) * 0.4;
+
+      windRoseCtx.clearRect(0, 0, w, h);
+
+      // achtergrond
+      windRoseCtx.fillStyle = "rgba(3, 7, 16, 0.9)";
+      windRoseCtx.fillRect(0, 0, w, h);
+
+      // cirkel
+      windRoseCtx.strokeStyle = "rgba(255,255,255,0.3)";
+      windRoseCtx.lineWidth = 2;
+      windRoseCtx.beginPath();
+      windRoseCtx.arc(cx, cy, r, 0, Math.PI * 2);
+      windRoseCtx.stroke();
+
+      // windpijl
+      const dir = wind.angle;
+      const arrowLen = r * 0.9;
+      const ax = cx + Math.cos(dir) * arrowLen;
+      const ay = cy + Math.sin(dir) * arrowLen;
+
+      windRoseCtx.strokeStyle = "rgba(255,255,255,0.9)";
+      windRoseCtx.lineWidth = 3;
+      windRoseCtx.beginPath();
+      windRoseCtx.moveTo(cx, cy);
+      windRoseCtx.lineTo(ax, ay);
+      windRoseCtx.stroke();
+
+      // tip driehoek
+      const side = 8;
+      const leftDir = dir + Math.PI * 0.75;
+      const rightDir = dir - Math.PI * 0.75;
+      const lx = ax + Math.cos(leftDir) * side;
+      const ly = ay + Math.sin(leftDir) * side;
+      const rx = ax + Math.cos(rightDir) * side;
+      const ry = ay + Math.sin(rightDir) * side;
+
+      windRoseCtx.beginPath();
+      windRoseCtx.moveTo(ax, ay);
+      windRoseCtx.lineTo(lx, ly);
+      windRoseCtx.lineTo(rx, ry);
+      windRoseCtx.closePath();
+      windRoseCtx.fillStyle = "rgba(255,255,255,0.9)";
+      windRoseCtx.fill();
+
+      // N-indicatie
+      windRoseCtx.fillStyle = "rgba(255,255,255,0.8)";
+      windRoseCtx.font = "11px system-ui, sans-serif";
+      windRoseCtx.textAlign = "center";
+      windRoseCtx.textBaseline = "top";
+      windRoseCtx.fillText("N", cx, 4);
+    }
+
+    // Eenvoudige minimap met positie van speler en eilanden
+    function drawMiniMap() {
+      if (!miniMapCtx) return;
+      const w = miniMapCanvas.width;
+      const h = miniMapCanvas.height;
+      miniMapCtx.clearRect(0, 0, w, h);
+
+      // achtergrond
+      miniMapCtx.fillStyle = "rgba(3, 10, 20, 0.95)";
+      miniMapCtx.fillRect(0, 0, w, h);
+
+      const scaleX = w / world.width;
+      const scaleY = h / world.height;
+
+      // eilanden
+      if (Array.isArray(islands)) {
+        islands.forEach(island => {
+          const ix = island.x * scaleX;
+          const iy = island.y * scaleY;
+          const r = (island.baseR || 120) * ((scaleX + scaleY) / 2) * 0.4;
+
+          if (island.biome === "tropical") {
+            miniMapCtx.fillStyle = "#5fbf6c";
+          } else if (island.biome === "rocky") {
+            miniMapCtx.fillStyle = "#a9acae";
+          } else {
+            miniMapCtx.fillStyle = "#b7c47a";
+          }
+          miniMapCtx.beginPath();
+          miniMapCtx.arc(ix, iy, Math.max(3, r), 0, Math.PI * 2);
+          miniMapCtx.fill();
+        });
+      }
+
+      // speler – klein bootje in plaats van een grote cirkel
+      const sx = player.x * scaleX;
+      const sy = player.y * scaleY;
+
+      miniMapCtx.save();
+      miniMapCtx.translate(sx, sy);
+      miniMapCtx.rotate(player.angle);
+      const bw = 4;
+      const bh = 6;
+      miniMapCtx.fillStyle = "#f5b15a";
+      miniMapCtx.beginPath();
+      miniMapCtx.moveTo(0, -bh / 2);
+      miniMapCtx.lineTo(bw / 2, bh / 2);
+      miniMapCtx.lineTo(-bw / 2, bh / 2);
+      miniMapCtx.closePath();
+      miniMapCtx.fill();
+      miniMapCtx.restore();
+
+      // kleine windpijl linksonder in de minimap
+      if (typeof wind !== "undefined") {
+        const cx = 14;
+        const cy = h - 14;
+        const r = 8;
+
+        miniMapCtx.strokeStyle = "rgba(255,255,255,0.3)";
+        miniMapCtx.lineWidth = 1;
+        miniMapCtx.beginPath();
+        miniMapCtx.arc(cx, cy, r, 0, Math.PI * 2);
+        miniMapCtx.stroke();
+
+        const dir = wind.angle;
+        const ax = cx + Math.cos(dir) * (r - 2);
+        const ay = cy + Math.sin(dir) * (r - 2);
+
+        miniMapCtx.strokeStyle = "rgba(255,255,255,0.9)";
+        miniMapCtx.lineWidth = 2;
+        miniMapCtx.beginPath();
+        miniMapCtx.moveTo(cx, cy);
+        miniMapCtx.lineTo(ax, ay);
+        miniMapCtx.stroke();
+      }
+    }
+
+    // Visuele indicatie van windrichting: golvende strepen over zee
+    function drawWindWaves() {
+      const spacing = 120; // afstand tussen golfbanen
+      const length = Math.max(canvas.width, canvas.height) * 1.6;
+
+      const dir = wind.angle;
+      const phase = wind.phase || 0;
+
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(dir);
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+      ctx.lineWidth = 1.5;
+
+      const maxOffset = canvas.height;
+      const waveAmp = 12;
+      const waveLen = 160;
+
+      for (let o = -maxOffset; o <= maxOffset; o += spacing) {
+        ctx.beginPath();
+        for (let x = -length / 2; x <= length / 2; x += 16) {
+          const y =
+            o +
+            Math.sin((x / waveLen) * Math.PI * 2 + phase + o * 0.02) * waveAmp;
+          if (x === -length / 2) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function drawGrid() {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.04)";
+      ctx.lineWidth = 1;
+
+      const gridSize = 250;
+      const startX = Math.floor(camera.x / gridSize) * gridSize;
+      const endX = camera.x + canvas.width;
+      const startY = Math.floor(camera.y / gridSize) * gridSize;
+      const endY = camera.y + canvas.height;
+
+      for (let x = startX; x <= endX; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x - camera.x, 0);
+        ctx.lineTo(x - camera.x, canvas.height);
+        ctx.stroke();
+      }
+
+      for (let y = startY; y <= endY; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y - camera.y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function drawIslands() {
+      islands.forEach(island => {
+        const screenX = island.x - camera.x;
+        const screenY = island.y - camera.y;
+
+        const maxR = island.baseR * 1.9;
+        if (
+          screenX + maxR < -200 ||
+          screenX - maxR > canvas.width + 200 ||
+          screenY + maxR < -200 ||
+          screenY - maxR > canvas.height + 200
+        ) {
+          return;
+        }
+
+        ctx.save();
+        ctx.translate(screenX, screenY);
+
+        const avgR = island.baseR;
+
+        const shallowOuter = avgR * 1.6;
+        const shallowInner = avgR * 0.9;
+        const shallowGrad = ctx.createRadialGradient(0, 0, shallowInner, 0, 0, shallowOuter);
+        shallowGrad.addColorStop(0, "rgba(0,0,0,0)");
+        shallowGrad.addColorStop(0.3, "rgba(0,180,200,0.35)");
+        shallowGrad.addColorStop(0.75, "rgba(0,150,190,0.18)");
+        shallowGrad.addColorStop(1, "rgba(0,0,0,0)");
+
+        ctx.fillStyle = shallowGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, shallowOuter, 0, Math.PI * 2);
+        ctx.fill();
+
+        const gradient = ctx.createRadialGradient(0, 0, avgR * 0.25, 0, 0, avgR * 1.4);
+
+        let innerSand, midSand, innerGrass, outerGrass;
+        if (island.biome === "rocky") {
+          innerSand = "#e3ddcf";
+          midSand = "#c9bfa8";
+          innerGrass = "#a0a98a";
+          outerGrass = "#6d7459";
+        } else if (island.biome === "tropical") {
+          innerSand = "#f9edc5";
+          midSand = "#f3d47a";
+          innerGrass = "#c5dd7a";
+          outerGrass = "#76b46a";
+        } else {
+          // temperate (standaard)
+          innerSand = "#f3e8bc";
+          midSand = "#dec979";
+          innerGrass = "#b8bd71";
+          outerGrass = "#7c9356";
+        }
+
+        gradient.addColorStop(0, innerSand);
+        gradient.addColorStop(0, innerSand);
+        gradient.addColorStop(0.3, midSand);
+        gradient.addColorStop(0.6, innerGrass);
+        gradient.addColorStop(1, outerGrass);
+
+        ctx.beginPath();
+        const first = island.points[0];
+        ctx.moveTo(first.x, first.y);
+        for (let i = 1; i < island.points.length; i++) {
+          const p = island.points[i];
+          ctx.lineTo(p.x, p.y);
+        }
+        ctx.closePath();
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(250,245,210,0.85)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(0,0,0,0.28)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        
+        
+
+island.hills.forEach(hill => {
+  const cx = hill.x, cy = hill.y, baseR = hill.size, t = hill.tint, tree = hill.tree;
+  const palettes = [
+    ["#a8d46c", "#7fb84d", "#5f8a3a"],
+    ["#c3df7c", "#a0c05f", "#6e8b3f"],
+    ["#d6e889", "#b4d26b", "#839f47"]
+  ];
+  const pal = palettes[Math.floor(t * 3)];
+
+  // Stam onder het bladerdek
+  if (tree && tree.trunk) {
+    ctx.strokeStyle = "rgba(70,40,10,0.25)";
+    ctx.lineWidth = tree.trunk.width;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(
+      cx + Math.cos(tree.trunk.angle) * tree.trunk.length,
+      cy + Math.sin(tree.trunk.angle) * tree.trunk.length
+    );
+    ctx.stroke();
+  }
+
+  if (!tree) return;
+
+  tree.clusters.forEach(cl => {
+    const baseColor = pal[cl.colorIndex];
+    const dark = "rgba(40,60,20,0.55)";
+
+    for (let i = 0; i < cl.lobes; i++) {
+      const ang = cl.rot + (i / cl.lobes) * Math.PI * 2;
+      const lx = cx + cl.dx + Math.cos(ang) * cl.r * 0.4;
+      const ly = cy + cl.dy + Math.sin(ang) * cl.r * 0.4;
+      const lr = cl.r * (0.55 + 0.15 * (1 - i / Math.max(1, cl.lobes - 1)));
+
+      const g = ctx.createRadialGradient(
+        lx - lr * 0.3,
+        ly - lr * 0.3,
+        lr * 0.2,
+        lx,
+        ly,
+        lr
+      );
+      g.addColorStop(0, baseColor);
+      g.addColorStop(1, dark);
+
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(lx, ly, lr, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Highlights (deterministisch)
+      for (let s = 0; s < cl.highlightCount; s++) {
+        const ha = cl.rot + (s / cl.highlightCount) * Math.PI * 2;
+        const hr = lr * (0.4 + 0.2 * (s / Math.max(1, cl.highlightCount - 1)));
+        const hx = lx + Math.cos(ha) * hr * 0.25;
+        const hy = ly + Math.sin(ha) * hr * 0.25;
+
+        ctx.fillStyle = "rgba(255,255,255,0.12)";
+        ctx.beginPath();
+        ctx.arc(hx, hy, lr * 0.08, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  });
+});
+island.bushes.forEach(bush => {
+          const bx = bush.x;
+          const by = bush.y;
+          const baseR = bush.size;
+          const t = bush.tint;
+
+          // Cartoon-struiken: compact, met meerdere bladlobben en highlights
+          const palette =
+            t < 0.33
+              ? ["#b8ec6b", "#94d553", "#6da53c"]
+              : (t < 0.66
+                  ? ["#c5f076", "#a2d85c", "#7ca546"]
+                  : ["#d0f485", "#afd96a", "#82aa4b"]);
+
+          const darkBase = "rgba(40, 70, 30, 0.75)";
+          const lightSpots = "rgba(255, 255, 255, 0.18)";
+
+          // Kleine helper: deterministische pseudo-random per struik
+          function bushRand(offset) {
+            const s = Math.sin((bx * 12.9898 + by * 78.233 + offset * 37.1)) * 43758.5453;
+            return s - Math.floor(s);
+          }
+
+          // Onderliggende donkere massa
+          ctx.fillStyle = darkBase;
+          bush.subCircles.forEach((sub, i) => {
+            const sx = bx + sub.dx * baseR;
+            const sy = by + sub.dy * baseR;
+            const r = baseR * sub.scale * 1.05;
+            ctx.beginPath();
+            ctx.arc(sx, sy, r, 0, Math.PI * 2);
+            ctx.fill();
+          });
+
+          // Bladlobben per subCircle (3–6 per sub)
+          bush.subCircles.forEach((sub, idxSub) => {
+            const baseX = bx + sub.dx * baseR;
+            const baseY = by + sub.dy * baseR;
+            const baseScale = baseR * sub.scale;
+
+            const lobeCount = 3 + Math.floor(bushRand(10 + idxSub) * 3); // 3–5 lobben
+
+            for (let i = 0; i < lobeCount; i++) {
+              const seed = 100 + idxSub * 10 + i;
+              const ang = bushRand(seed) * Math.PI * 2;
+              const dist = baseScale * (0.15 + 0.25 * bushRand(seed + 1));
+              const lx = baseX + Math.cos(ang) * dist;
+              const ly = baseY + Math.sin(ang) * dist;
+              const lr = baseScale * (0.4 + 0.25 * bushRand(seed + 2));
+
+              const palIndex = Math.floor(bushRand(seed + 3) * 3);
+              const col = palette[palIndex];
+
+              const grad = ctx.createRadialGradient(
+                lx - lr * 0.3, ly - lr * 0.3, lr * 0.2,
+                lx, ly, lr
+              );
+              grad.addColorStop(0, col);
+              grad.addColorStop(1, darkBase);
+
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.arc(lx, ly, lr, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Kleine highlights
+              const spotCount = 2 + Math.floor(bushRand(seed + 4) * 3);
+              for (let s = 0; s < spotCount; s++) {
+                const ha = bushRand(seed + 5 + s) * Math.PI * 2;
+                const hr = lr * (0.4 + 0.3 * bushRand(seed + 6 + s));
+                const hx = lx + Math.cos(ha) * hr;
+                const hy = ly + Math.sin(ha) * hr;
+                ctx.fillStyle = lightSpots;
+                ctx.beginPath();
+                ctx.arc(hx, hy, lr * 0.12, 0, Math.PI * 2);
+                ctx.fill();
+              }
+            }
+          });
+        });
+
+
+island.rocks.forEach(rock => {
+          const rx = rock.localX;
+          const ry = rock.localY;
+          const size = rock.size;
+          const t = rock.tone;
+
+          let c1, c2, c3;
+          if (t < 0.33) {
+            c1 = "#f0f0f0";
+            c2 = "#c7c7c7";
+            c3 = "#8a8a8a";
+          } else if (t < 0.66) {
+            c1 = "#e0e0e0";
+            c2 = "#b3b3b3";
+            c3 = "#7a7a7a";
+          } else {
+            c1 = "#d4c8b5";
+            c2 = "#a5957e";
+            c3 = "#6b5b46";
+          }
+
+          const shapeType = rock.shapeType;
+
+          if (shapeType === "ellipse") {
+            const rockGrad = ctx.createRadialGradient(
+              rx - size * 0.2,
+              ry - size * 0.2,
+              size * 0.2,
+              rx,
+              ry,
+              size
+            );
+            rockGrad.addColorStop(0, c1);
+            rockGrad.addColorStop(0.4, c2);
+            rockGrad.addColorStop(1, c3);
+
+            ctx.fillStyle = rockGrad;
+            ctx.beginPath();
+            ctx.ellipse(rx, ry, size * 1.1, size * 0.8, rock.angle, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (shapeType === "chunk" && rock.poly) {
+            const rockGrad = ctx.createRadialGradient(
+              rx,
+              ry,
+              size * 0.1,
+              rx,
+              ry,
+              size * 1.5
+            );
+            rockGrad.addColorStop(0, c1);
+            rockGrad.addColorStop(0.4, c2);
+            rockGrad.addColorStop(1, c3);
+
+            ctx.fillStyle = rockGrad;
+            ctx.beginPath();
+            const first = rock.poly[0];
+            ctx.moveTo(rx + first.x, ry + first.y);
+            for (let i = 1; i < rock.poly.length; i++) {
+              const p = rock.poly[i];
+              ctx.lineTo(rx + p.x, ry + p.y);
+            }
+            ctx.closePath();
+            ctx.fill();
+          } else if (shapeType === "multi" && rock.sub) {
+            const rockGrad = ctx.createRadialGradient(
+              rx - size * 0.2,
+              ry - size * 0.2,
+              size * 0.2,
+              rx,
+              ry,
+              size * 1.3
+            );
+            rockGrad.addColorStop(0, c1);
+            rockGrad.addColorStop(0.4, c2);
+            rockGrad.addColorStop(1, c3);
+
+            ctx.fillStyle = rockGrad;
+            rock.sub.forEach(sub => {
+              ctx.beginPath();
+              ctx.ellipse(
+                rx + sub.dx,
+                ry + sub.dy,
+                size * sub.scale,
+                size * sub.scale * 0.8,
+                sub.angle,
+                0,
+                Math.PI * 2
+              );
+              ctx.fill();
+            });
+          }
+
+        });
+
+        if (island.harbor) {
+          const hx = island.harbor.localX;
+          const hy = island.harbor.localY;
+          const ang = island.harbor.angle;
+          const dockLen = island.harbor.dockLen;
+
+          ctx.save();
+          ctx.translate(hx, hy);
+          ctx.rotate(ang);
+
+          const dockWidth = avgR * 0.12;
+          ctx.fillStyle = "#9b6a3a";
+          ctx.fillRect(0, -dockWidth / 2, dockLen, dockWidth);
+
+          ctx.strokeStyle = "rgba(60,40,25,0.7)";
+          ctx.lineWidth = 1;
+          const plankCount = 6;
+          for (let i = 1; i < plankCount; i++) {
+            const t = (dockLen / plankCount) * i;
+            ctx.beginPath();
+            ctx.moveTo(t, -dockWidth / 2);
+            ctx.lineTo(t, dockWidth / 2);
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = "#5b3a21";
+          const postOffset = dockLen - dockWidth * 0.3;
+          const postRadius = dockWidth * 0.18;
+          ctx.beginPath();
+          ctx.arc(postOffset, -dockWidth * 0.4, postRadius, 0, Math.PI * 2);
+          ctx.arc(postOffset, dockWidth * 0.4, postRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+
+          const houseLocalX = island.harbor.houseLocalX;
+          const houseLocalY = island.harbor.houseLocalY;
+
+          ctx.save();
+          ctx.translate(houseLocalX, houseLocalY);
+
+          const houseW = avgR * 0.22;
+          const houseH = avgR * 0.18;
+
+          ctx.fillStyle = "rgba(0,0,0,0.25)";
+          ctx.beginPath();
+          ctx.ellipse(4, 6, houseW * 0.55, houseH * 0.55, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "#c96b3b";
+          ctx.fillRect(-houseW / 2, -houseH / 2, houseW, houseH);
+
+          ctx.fillStyle = "rgba(255,255,255,0.12)";
+          ctx.fillRect(-houseW / 2, -houseH / 2, houseW * 0.9, houseH * 0.45);
+
+          ctx.fillStyle = "#3b2313";
+          ctx.beginPath();
+          ctx.arc(0, houseH * 0.1, houseH * 0.1, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        ctx.restore();
+      });
+    }
+
+    function drawPlayer() {
+      const screenX = player.x - camera.x;
+      const screenY = player.y - camera.y;
+
+      ctx.save();
+      ctx.translate(screenX, screenY);
+      ctx.rotate(player.angle);
+
+      const w = 18;
+      const h = 36;
+      const hw = w / 2;
+      const hh = h / 2;
+
+      // Romp
+      ctx.fillStyle = "#c89b53";
+      ctx.strokeStyle = "#2a1d0d";
+      ctx.lineWidth = 1.6;
+
+      ctx.beginPath();
+      ctx.moveTo(0, -hh);
+      ctx.quadraticCurveTo(hw, -hh * 0.2, hw, hh * 0.3);
+      ctx.lineTo(hw * 0.7, hh);
+      ctx.lineTo(-hw * 0.7, hh);
+      ctx.lineTo(-hw, hh * 0.3);
+      ctx.quadraticCurveTo(-hw, -hh * 0.2, 0, -hh);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Dek
+      ctx.fillStyle = "rgba(255,255,255,0.1)";
+      ctx.beginPath();
+      ctx.moveTo(-hw * 0.6, hh * 0.2);
+      ctx.lineTo(hw * 0.6, hh * 0.2);
+      ctx.lineTo(hw * 0.5, -hh * 0.15);
+      ctx.lineTo(-hw * 0.5, -hh * 0.15);
+      ctx.closePath();
+      ctx.fill();
+
+      // Mast
+      ctx.fillStyle = "#3b2b18";
+      ctx.beginPath();
+      ctx.arc(0, -hh * 0.25, 2.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Giek
+      ctx.strokeStyle = "#3b2b18";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, -hh * 0.25);
+      ctx.lineTo(hw * 0.9, -hh * 0.15);
+      ctx.stroke();
+
+      // Zeil
+      ctx.fillStyle = "#f5f0e7";
+      ctx.beginPath();
+      ctx.moveTo(0, -hh * 0.25);
+      ctx.lineTo(hw * 0.65, -hh * 0.2);
+      ctx.lineTo(0, -hh * 0.05);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+
+    function drawTarget() {
+      if (player.targetX === null || player.targetY === null) return;
+
+      const screenX = player.targetX - camera.x;
+      const screenY = player.targetY - camera.y;
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(screenX, screenY, 10, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(screenX - 14, screenY);
+      ctx.lineTo(screenX + 14, screenY);
+      ctx.moveTo(screenX, screenY - 14);
+      ctx.lineTo(screenX, screenY + 14);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+
+    function drawWorldBounds() {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255,255,255,0.09)";
+      ctx.lineWidth = 4;
+
+      const left   = -camera.x;
+      const top    = -camera.y;
+      const right  = world.width - camera.x;
+      const bottom = world.height - camera.y;
+
+      ctx.strokeRect(left, top, right - left, bottom - top);
+      ctx.restore();
+    }
+
+    let lastTime = performance.now();
+
+    function update(dt) {
+      if (player.targetX !== null && player.targetY !== null) {
+        const dx = player.targetX - player.x;
+        const dy = player.targetY - player.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > 2) {
+          const dirX = dx / dist;
+          const dirY = dy / dist;
+
+          const shipDiameter = player.radius * 2;
+          const slowZone = shipDiameter * 2;
+          let minDistToCollision = Infinity;
+
+          islands.forEach(island => {
+            const idx = player.x - island.x;
+            const idy = player.y - island.y;
+            const d = Math.sqrt(idx * idx + idy * idy);
+            const minDist = island.collisionR + player.radius * 0.6;
+            const diff = d - minDist;
+            if (diff < minDistToCollision) {
+              minDistToCollision = diff;
+            }
+
+            island.rocks.forEach(rock => {
+              const rdx = player.x - rock.worldX;
+              const rdy = player.y - rock.worldY;
+              const rd = Math.sqrt(rdx * rdx + rdy * rdy);
+              const rMinDist = rock.collisionR + player.radius * 0.6;
+              const rDiff = rd - rMinDist;
+              if (rDiff < minDistToCollision) {
+                minDistToCollision = rDiff;
+              }
+            });
+          });
+
+          let speedFactor = 1;
+          if (minDistToCollision < slowZone && minDistToCollision > 0) {
+            speedFactor = clamp(minDistToCollision / slowZone, 0.25, 1);
+          }
+
+          // --- Wind beïnvloedt snelheid ---
+          // Kleine random drift in windrichting
+          const drift = (Math.random() - 0.5) * dt * 0.15;
+          wind.angle += drift;
+          // normaliseer hoek
+          if (wind.angle > Math.PI * 2) wind.angle -= Math.PI * 2;
+          if (wind.angle < 0) wind.angle += Math.PI * 2;
+
+          // windStrength licht variëren binnen bereik
+          wind.strength = clamp(wind.strength + (Math.random() - 0.5) * dt * 0.2, 0.4, 1.0);
+
+          // fase voor animatie van golfjes
+          wind.phase = (wind.phase || 0) + dt * 0.6;
+          if (wind.phase > Math.PI * 2) wind.phase -= Math.PI * 2;
+
+          // Als we bewegen, pas snelheid aan op basis van hoek tussen koers en wind
+          const shipDir = Math.atan2(dirY, dirX);
+          const angleDiff = Math.cos(shipDir - wind.angle); // -1..1
+          // met wind mee: iets sneller, tegen wind in: trager
+          const windBoost = 1 + angleDiff * (0.35 * wind.strength);
+          const windFactor = clamp(windBoost, 0.6, 1.6);
+          speedFactor *= windFactor;
+          // --- einde wind ---
+
+          const moveDist = player.speed * speedFactor * dt;
+
+          let newX, newY;
+          const prevX = player.x;
+          const prevY = player.y;
+
+          if (moveDist >= dist) {
+            newX = player.targetX;
+            newY = player.targetY;
+          } else {
+            newX = player.x + dirX * moveDist;
+            newY = player.y + dirY * moveDist;
+          }
+
+          let collided = false;
+
+          // Collision met steigers (havens) zodat je er niet overheen kunt varen
+          if (!collided) {
+            for (let i = 0; i < islands.length; i++) {
+              const island = islands[i];
+              if (!island.harbor) continue;
+              const harbor = island.harbor;
+
+              // transformeer nieuwe positie naar lokaal coördinaatstelsel van de steiger
+              const dxh = newX - harbor.worldX;
+              const dyh = newY - harbor.worldY;
+              const cosA = Math.cos(harbor.angle);
+              const sinA = Math.sin(harbor.angle);
+
+              const localXh = dxh * cosA + dyh * sinA;
+              const localYh = -dxh * sinA + dyh * cosA;
+
+              const dockWidth = island.baseR * 0.12;
+              const halfWidth = dockWidth / 2;
+              const marginX = dockWidth * 0.3;
+              const marginY = dockWidth * 0.4;
+
+              if (localXh >= -marginX && localXh <= harbor.dockLen + marginX &&
+                  Math.abs(localYh) <= halfWidth + marginY) {
+                // terug naar vorige veilige positie en stoppen
+                player.x = prevX;
+                player.y = prevY;
+                player.targetX = null;
+                player.targetY = null;
+                collided = true;
+                break;
+              }
+            }
+          }
+
+          for (let i = 0; i < islands.length; i++) {
+            const island = islands[i];
+            const idx = newX - island.x;
+            const idy = newY - island.y;
+            const d = Math.sqrt(idx * idx + idy * idy);
+            const minDist = island.collisionR + player.radius * 0.6;
+
+            if (d < minDist) {
+              const safeDist = minDist;
+              const ndx = idx === 0 && idy === 0 ? 1 : idx / d;
+              const ndy = idx === 0 && idy === 0 ? 0 : idy / d;
+              player.x = island.x + ndx * safeDist;
+              player.y = island.y + ndy * safeDist;
+              player.targetX = null;
+              player.targetY = null;
+              collided = true;
+              break;
+            }
+          }
+
+          if (!collided) {
+            for (let i = 0; i < islands.length; i++) {
+              const island = islands[i];
+              for (let j = 0; j < island.rocks.length; j++) {
+                const rock = island.rocks[j];
+                const rdx = newX - rock.worldX;
+                const rdy = newY - rock.worldY;
+                const rd = Math.sqrt(rdx * rdx + rdy * rdy);
+                const rMinDist = rock.collisionR + player.radius * 0.6;
+
+                if (rd < rMinDist) {
+                  const safeDist = rMinDist;
+                  const ndx = rdx === 0 && rdy === 0 ? 1 : rdx / rd;
+                  const ndy = rdx === 0 && rdy === 0 ? 0 : rdy / rd;
+                  player.x = rock.worldX + ndx * safeDist;
+                  player.y = rock.worldY + ndy * safeDist;
+                  player.targetX = null;
+                  player.targetY = null;
+                  collided = true;
+                  break;
+                }
+              }
+              if (collided) break;
+            }
+          }
+
+          if (!collided) {
+            player.x = newX;
+            player.y = newY;
+          }
+
+          player.angle = Math.atan2(dirY, dirX) + Math.PI / 2;
+        } else {
+          player.targetX = null;
+          player.targetY = null;
+        }
+      }
+
+      player.x = clamp(player.x, 0, world.width);
+      player.y = clamp(player.y, 0, world.height);
+
+      camera.x = player.x - canvas.width / (2 * worldScale);
+      camera.y = player.y - canvas.height / (2 * worldScale);
+
+      camera.x = clamp(camera.x, 0, Math.max(0, world.width - canvas.width / worldScale));
+      camera.y = clamp(camera.y, 0, Math.max(0, world.height - canvas.height / worldScale));
+    }
+
+    function render() {
+      drawSea();
+// drawGrid(); // uitgeschakeld: geen diagonale lijnen meer
+
+      // Wereld tekenen met zoom (worldScale)
+      ctx.save();
+      ctx.scale(worldScale, worldScale);
+      drawWorldBounds();
+      drawIslands();
+      drawTarget();
+      drawPlayer();
+      ctx.restore();
+      }
+
+    function loop(timestamp) {
+      const dt = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      update(dt);
+      render();
+      // drawWindRose(); // disabled, we only use wind in minimap
+      drawMiniMap();
+      requestAnimationFrame(loop);
+    }
+
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
